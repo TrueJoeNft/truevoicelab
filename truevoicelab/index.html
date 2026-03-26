@@ -1301,116 +1301,170 @@
       <p style="font-size:14px;color:var(--muted)" data-t="social_follow">@TrueVoiceNFT — Follow the journey across all platforms</p>
     </div>
 
-    <!-- 
-      SOCIAL WIDGET INTEGRATION NOTE:
-      Para activar los widgets reales de redes sociales:
-      
-      1. YOUTUBE: Regístrate en elfsight.com (free plan), crea un YouTube widget,
-         copia el script e ID y reemplaza el placeholder de abajo.
-      
-      2. TWITTER/X: El widget oficial de X es gratuito. Ve a publish.twitter.com,
-         introduce tu URL de perfil y copia el embed code.
-      
-      3. TIKTOK: Usa elfsight.com o snapwidget.com (free tier disponible),
-         conecta @truevoicenft y copia el script.
-      
-      Por ahora los feeds muestran los iframes oficiales disponibles.
-    -->
-
+    <!-- Social feed cards — consistent visual design, no external API dependencies -->
     <div class="social-feeds-grid reveal">
-      <!-- YOUTUBE — channel latest videos gallery -->
+
+      <!-- YOUTUBE -->
       <div class="feed-column">
-        <h4><i class="fab fa-youtube"></i> <span data-t="feed_yt">YOUTUBE</span></h4>
-        <div class="feed-embed-wrap" style="padding:0; overflow:hidden; min-height:280px; display:block; border-radius:14px;">
-          <iframe
-            src="https://www.youtube.com/embed/videoseries?list=UU9I0gHCS5fL2MDHSudvxyiw"
-            width="100%" height="280"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-            style="display:block; border-radius:14px;">
-          </iframe>
-        </div>
-        <a href="https://youtube.com/@truevoicenft" target="_blank" rel="noopener noreferrer"
+        <h4><i class="fab fa-youtube" style="color:#FF0000"></i> <span data-t="feed_yt">YOUTUBE</span></h4>
+        <a href="https://youtube.com/channel/UC9I0gHCS5fL2MDHSudvxyiw" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:block;">
+          <div style="background:#0a0a0a; border:1px solid var(--border); border-radius:14px; overflow:hidden; min-height:280px; display:flex; flex-direction:column; transition:border-color 0.3s;"
+               onmouseover="this.style.borderColor='var(--gold-dim)'" onmouseout="this.style.borderColor='var(--border)'">
+            <!-- Channel art -->
+            <div style="position:relative; height:160px; background:linear-gradient(135deg,#1a0800,#0d0d0a); overflow:hidden;">
+              <img src="img/TrueVoiceArtistRuffus3.png" alt="TrueVoice YouTube"
+                   style="position:absolute; right:-10px; bottom:0; height:155px; object-fit:contain; opacity:0.9;">
+              <div style="position:absolute; inset:0; background:linear-gradient(90deg,rgba(0,0,0,0.7) 30%,transparent);">
+                <div style="padding:16px;">
+                  <div style="background:#FF0000; display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:4px; font-family:var(--font-display); font-size:12px; color:#fff; letter-spacing:0.1em; margin-bottom:8px;">
+                    <i class="fab fa-youtube"></i> YOUTUBE
+                  </div>
+                  <div style="font-family:var(--font-display); font-size:20px; color:var(--white); letter-spacing:0.05em;">TrueVoiceNFT</div>
+                  <div style="font-size:12px; color:var(--muted); margin-top:2px;" data-t="yt_subs">Music · AI Artists · Web3</div>
+                </div>
+              </div>
+            </div>
+            <!-- Latest video preview -->
+            <div style="padding:14px; flex:1;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                <div style="width:8px; height:8px; border-radius:50%; background:#FF0000; flex-shrink:0;"></div>
+                <span style="font-family:var(--font-display); font-size:11px; letter-spacing:0.15em; color:var(--muted);" data-t="yt_latest">LATEST ON THE CHANNEL</span>
+              </div>
+              <div style="background:rgba(255,255,255,0.04); border-radius:8px; padding:10px 12px; display:flex; align-items:center; gap:10px;">
+                <div style="width:36px; height:36px; border-radius:6px; background:linear-gradient(135deg,var(--gold-dim),#1a0800); flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                  <i class="fas fa-play" style="color:var(--gold-lt); font-size:12px; margin-left:2px;"></i>
+                </div>
+                <div>
+                  <div style="font-size:13px; color:var(--white); line-height:1.3;" data-t="yt_video_title">#truevoiceNFT trailer — the revolution starts</div>
+                  <div style="font-size:11px; color:var(--muted); margin-top:2px;">1:42</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="https://youtube.com/channel/UC9I0gHCS5fL2MDHSudvxyiw" target="_blank" rel="noopener noreferrer"
            style="display:inline-flex; align-items:center; gap:8px; margin-top:12px; font-family:var(--font-display); font-size:13px; letter-spacing:0.1em; color:var(--gold-lt); border:1px solid var(--gold-dim); padding:6px 16px; border-radius:6px;">
-          <i class="fab fa-youtube"></i> @truevoicenft
+          <i class="fab fa-youtube"></i> <span data-t="yt_follow">SUBSCRIBE</span>
         </a>
       </div>
 
-      <!-- TWITTER/X — native dark embed -->
+      <!-- TWITTER/X -->
       <div class="feed-column">
         <h4><i class="fab fa-x-twitter"></i> <span data-t="feed_x">X / TWITTER</span></h4>
-        <div class="feed-embed-wrap" style="padding:0; overflow:hidden; min-height:280px; align-items:stretch; border-radius:14px; display:block;">
-          <a class="twitter-timeline"
-            data-theme="dark"
-            data-chrome="noheader nofooter noborders transparent"
-            data-tweet-limit="2"
-            data-height="280"
-            href="https://twitter.com/TrueVoiceNFT">
-          </a>
-          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
+        <a href="https://twitter.com/TrueVoiceNFT" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:block;">
+          <div style="background:#0a0a0f; border:1px solid var(--border); border-radius:14px; overflow:hidden; min-height:280px; display:flex; flex-direction:column; transition:border-color 0.3s;"
+               onmouseover="this.style.borderColor='var(--gold-dim)'" onmouseout="this.style.borderColor='var(--border)'">
+            <!-- Header -->
+            <div style="padding:16px 16px 12px; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; gap:12px;">
+              <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--gold-dim),#1a0800); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;">🐾</div>
+              <div style="flex:1;">
+                <div style="font-family:var(--font-display); font-size:15px; color:var(--white); letter-spacing:0.04em;">TrueVoiceNFT</div>
+                <div style="font-size:12px; color:var(--muted);">@TrueVoiceNFT</div>
+              </div>
+              <i class="fab fa-x-twitter" style="color:var(--muted); font-size:18px;"></i>
+            </div>
+            <!-- Mock tweets -->
+            <div style="padding:14px; flex:1; display:flex; flex-direction:column; gap:12px;">
+              <div style="background:rgba(255,255,255,0.04); border-radius:10px; padding:12px;">
+                <p style="font-size:13px; color:var(--white); line-height:1.55; margin:0 0 8px;" data-t="tweet1">
+                  Music lived on Spotify. Stories lived on Netflix. They never met — until now. 🐾 <span style="color:var(--gold-lt)">#TrueVoice #Ruffus #Web3Music</span>
+                </p>
+                <div style="font-size:11px; color:var(--muted);">@TrueVoiceNFT</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04); border-radius:10px; padding:12px;">
+                <p style="font-size:13px; color:var(--white); line-height:1.55; margin:0 0 8px;" data-t="tweet2">
+                  333 Genesis RuFans. Q4 2026. One NFT. Permanent membership in the story. Are you in? 🔗 <span style="color:var(--gold-lt)">#RUFANS #Solana</span>
+                </p>
+                <div style="font-size:11px; color:var(--muted);">@TrueVoiceNFT</div>
+              </div>
+            </div>
+          </div>
+        </a>
         <a href="https://twitter.com/TrueVoiceNFT" target="_blank" rel="noopener noreferrer"
            style="display:inline-flex; align-items:center; gap:8px; margin-top:12px; font-family:var(--font-display); font-size:13px; letter-spacing:0.1em; color:var(--gold-lt); border:1px solid var(--gold-dim); padding:6px 16px; border-radius:6px;">
-          <i class="fab fa-x-twitter"></i> @TrueVoiceNFT
+          <i class="fab fa-x-twitter"></i> <span data-t="x_follow">FOLLOW</span>
         </a>
       </div>
 
-      <!-- INSTAGRAM — visual preview card -->
+      <!-- INSTAGRAM -->
       <div class="feed-column">
-        <h4><i class="fab fa-instagram"></i> <span data-t="feed_ig">INSTAGRAM</span></h4>
-        <div style="background:linear-gradient(135deg,#1a0a1a,#0d0d1a); border:1px solid var(--border); border-radius:14px; overflow:hidden; min-height:280px; display:flex; flex-direction:column;">
-          <!-- Header bar mimicking IG app -->
-          <div style="display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#ff6a00); display:flex; align-items:center; justify-content:center; font-size:14px;">🐾</div>
-            <div>
-              <div style="font-family:var(--font-display); font-size:13px; color:var(--white); letter-spacing:0.05em;">truevoicenft</div>
-              <div style="font-size:11px; color:var(--muted);">Ruffus Universe</div>
+        <h4><i class="fab fa-instagram" style="color:#E1306C"></i> <span data-t="feed_ig">INSTAGRAM</span></h4>
+        <a href="https://instagram.com/truevoicenft" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:block;">
+          <div style="background:linear-gradient(135deg,#1a0a1a,#0d0d1a); border:1px solid var(--border); border-radius:14px; overflow:hidden; min-height:280px; display:flex; flex-direction:column; transition:border-color 0.3s;"
+               onmouseover="this.style.borderColor='var(--gold-dim)'" onmouseout="this.style.borderColor='var(--border)'">
+            <!-- Header -->
+            <div style="display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); display:flex; align-items:center; justify-content:center; font-size:16px;">🐾</div>
+              <div>
+                <div style="font-family:var(--font-display); font-size:13px; color:var(--white); letter-spacing:0.05em;">truevoicenft</div>
+                <div style="font-size:11px; color:var(--muted);">Ruffus Universe</div>
+              </div>
+              <div style="margin-left:auto;"><i class="fab fa-instagram" style="color:#E1306C; font-size:18px;"></i></div>
             </div>
-            <div style="margin-left:auto;">
-              <i class="fab fa-instagram" style="color:var(--gold-dim); font-size:18px;"></i>
-            </div>
-          </div>
-          <!-- Visual placeholder with Ruffus image -->
-          <div style="flex:1; background:url('img/TrueVoiceArtistRuffus3.png') center/contain no-repeat, #080818; min-height:180px; opacity:0.7;"></div>
-          <!-- Caption -->
-          <div style="padding:12px 14px;">
-            <p style="font-size:13px; color:var(--muted); line-height:1.5; margin:0;" data-t="ig_placeholder">
-              Follow <strong style="color:var(--gold-lt)">@truevoicenft</strong> for behind-the-scenes, character drops and Ruffus universe updates.
-            </p>
-          </div>
-        </div>
-        <a href="https://instagram.com/truevoicenft" target="_blank" rel="noopener noreferrer"
-           style="display:inline-flex; align-items:center; gap:8px; margin-top:12px; font-family:var(--font-display); font-size:13px; letter-spacing:0.1em; color:var(--gold-lt); border:1px solid var(--gold-dim); padding:6px 16px; border-radius:6px;">
-          <i class="fab fa-instagram"></i> @truevoicenft
-        </a>
-      </div>
-    </div>
-
-    <!-- TikTok visual card -->
-    <div style="margin-top:24px" class="reveal">
-      <div class="feed-column">
-        <h4><i class="fab fa-tiktok"></i> <span data-t="feed_tt">TIKTOK</span></h4>
-        <div style="background:linear-gradient(135deg,#0a0a0a,#0d0d1a); border:1px solid var(--border); border-radius:14px; overflow:hidden; display:flex; align-items:stretch; min-height:120px;">
-          <!-- TikTok style color bar -->
-          <div style="width:4px; background:linear-gradient(180deg,#ff0050,#00f2ea); flex-shrink:0;"></div>
-          <div style="display:flex; align-items:center; gap:20px; padding:20px 24px; flex:1; flex-wrap:wrap;">
-            <div style="width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#ff0050,#00f2ea); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">🐾</div>
-            <div style="flex:1; min-width:200px;">
-              <div style="font-family:var(--font-display); font-size:16px; color:var(--white); letter-spacing:0.05em; margin-bottom:4px;">@truevoicenft</div>
-              <p style="font-size:14px; color:var(--muted); line-height:1.5; margin:0;" data-t="tt_placeholder">
-                Ruffus clips, making-of moments and AI music experiments. Updated weekly.
+            <!-- Image -->
+            <div style="flex:1; background:url('img/TrueVoiceArtistRuffus3.png') center/contain no-repeat, #080818; min-height:180px;"></div>
+            <!-- Caption -->
+            <div style="padding:12px 14px;">
+              <p style="font-size:13px; color:var(--muted); line-height:1.5; margin:0;" data-t="ig_placeholder">
+                Follow <strong style="color:var(--gold-lt)">@truevoicenft</strong> for behind-the-scenes, character drops and Ruffus universe updates.
               </p>
             </div>
-            <a href="https://www.tiktok.com/@truevoicenft" target="_blank" rel="noopener noreferrer"
-               style="font-family:var(--font-display); font-size:13px; letter-spacing:0.1em; color:var(--gold-lt); border:1px solid var(--gold-dim); padding:8px 18px; border-radius:6px; white-space:nowrap; flex-shrink:0;"
-               data-t="tt_follow_btn">
-              FOLLOW
-            </a>
+          </div>
+        </a>
+        <a href="https://instagram.com/truevoicenft" target="_blank" rel="noopener noreferrer"
+           style="display:inline-flex; align-items:center; gap:8px; margin-top:12px; font-family:var(--font-display); font-size:13px; letter-spacing:0.1em; color:var(--gold-lt); border:1px solid var(--gold-dim); padding:6px 16px; border-radius:6px;">
+          <i class="fab fa-instagram"></i> <span data-t="ig_follow_btn">FOLLOW</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- TIKTOK — full width card -->
+    <div style="margin-top:24px" class="reveal">
+      <h4><i class="fab fa-tiktok"></i> <span data-t="feed_tt">TIKTOK</span></h4>
+      <a href="https://www.tiktok.com/@truevoicenft" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:block;">
+        <div style="background:#0a0a0a; border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:border-color 0.3s;"
+             onmouseover="this.style.borderColor='var(--gold-dim)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="display:flex; align-items:stretch;">
+            <!-- Color bar -->
+            <div style="width:4px; background:linear-gradient(180deg,#ff0050,#00f2ea); flex-shrink:0;"></div>
+            <div style="display:flex; align-items:center; gap:24px; padding:24px 28px; flex:1; flex-wrap:wrap;">
+              <!-- Avatar -->
+              <div style="width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,#ff0050,#00f2ea); padding:2px; flex-shrink:0;">
+                <div style="width:100%; height:100%; border-radius:50%; background:#0a0a0a; display:flex; align-items:center; justify-content:center; font-size:28px;">🐾</div>
+              </div>
+              <!-- Info -->
+              <div style="flex:1; min-width:200px;">
+                <div style="font-family:var(--font-display); font-size:22px; color:var(--white); letter-spacing:0.04em; margin-bottom:4px;">@truevoicenft</div>
+                <p style="font-size:14px; color:var(--muted); line-height:1.55; margin:0;" data-t="tt_placeholder">
+                  Ruffus clips, making-of moments and AI music experiments. Short-form content updated weekly.
+                </p>
+              </div>
+              <!-- Stats mock -->
+              <div style="display:flex; gap:28px; flex-shrink:0;">
+                <div style="text-align:center;">
+                  <div style="font-family:var(--font-display); font-size:22px; color:var(--white);">🎵</div>
+                  <div style="font-size:11px; color:var(--muted); margin-top:2px;" data-t="tt_music">MUSIC</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="font-family:var(--font-display); font-size:22px; color:var(--white);">🎬</div>
+                  <div style="font-size:11px; color:var(--muted); margin-top:2px;" data-t="tt_clips">CLIPS</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="font-family:var(--font-display); font-size:22px; color:var(--white);">🐾</div>
+                  <div style="font-size:11px; color:var(--muted); margin-top:2px;" data-t="tt_ruffus">RUFFUS</div>
+                </div>
+              </div>
+              <!-- Follow button -->
+              <a href="https://www.tiktok.com/@truevoicenft" target="_blank" rel="noopener noreferrer"
+                 style="font-family:var(--font-display); font-size:14px; letter-spacing:0.1em; color:#000; background:linear-gradient(135deg,#ff0050,#ff4080); padding:10px 24px; border-radius:8px; white-space:nowrap; flex-shrink:0;"
+                 data-t="tt_follow_btn">
+                FOLLOW ON TIKTOK
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -1566,11 +1620,19 @@ const T = {
     phase5_body:"First hybrid festival. Mixed reality live performances. Metaverse presence. TrueVoice becomes the global franchise model for AI artist labels.",
     social_label:"FOLLOW THE STORY", social_title:"Stay in<br><span>the world.</span>",
     social_follow:"@TrueVoiceNFT — Follow the journey across all platforms",
-    feed_yt:"YOUTUBE", feed_x:"X / TWITTER", feed_ig:"INSTAGRAM", feed_tt:"TIKTOK · @truevoicenft",
-    ig_placeholder:"Follow <strong style='color:var(--gold-lt)'>@truevoicenft</strong> on Instagram for behind-the-scenes content, character drops, and Ruffus universe updates.",
-    ig_follow_btn:"FOLLOW ON INSTAGRAM", ig_note:"Live feed activation via Elfsight — coming soon",
+    feed_yt:"YOUTUBE", feed_x:"X / TWITTER", feed_ig:"INSTAGRAM", feed_tt:"TIKTOK",
+    yt_subs:"Music · AI Artists · Web3",
+    yt_latest:"LATEST ON THE CHANNEL",
+    yt_video_title:"#truevoiceNFT trailer — the revolution starts",
+    yt_follow:"SUBSCRIBE",
+    tweet1:"Music lived on Spotify. Stories lived on Netflix. They never met — until now. 🐾 #TrueVoice #Ruffus #Web3Music",
+    tweet2:"333 Genesis RuFans. Q4 2026. One NFT. Permanent membership in the story. Are you in? 🔗 #RUFANS #Solana",
+    x_follow:"FOLLOW",
+    ig_placeholder:"Follow <strong style='color:var(--gold-lt)'>@truevoicenft</strong> for behind-the-scenes content, character drops, and Ruffus universe updates.",
+    ig_follow_btn:"FOLLOW",
     tt_placeholder:"The latest Ruffus clips, making-of moments, and AI music experiments live on TikTok. Short-form content updated weekly.",
     tt_follow_btn:"FOLLOW ON TIKTOK",
+    tt_music:"MUSIC", tt_clips:"CLIPS", tt_ruffus:"RUFFUS",
     spotify_label:"THE MUSIC", spotify_title:"Listen to<br><span>the universe.</span>",
     footer_contact:"Business enquiries:", footer_privacy:"Privacy Policy", footer_cookies:"Cookie Policy",
     cookie_text:'This website uses cookies to improve your experience. <a href="#">Cookie Policy</a>.',
@@ -1649,11 +1711,19 @@ const T = {
     phase5_body:"Primer festival híbrido. Actuaciones en vivo con realidad mixta. Presencia en metaverso. TrueVoice se convierte en el modelo de franquicia global para sellos de artistas IA.",
     social_label:"SIGUE LA HISTORIA", social_title:"Permanece en<br><span>el universo.</span>",
     social_follow:"@TrueVoiceNFT — Sigue el viaje en todas las plataformas",
-    feed_yt:"YOUTUBE", feed_x:"X / TWITTER", feed_ig:"INSTAGRAM", feed_tt:"TIKTOK · @truevoicenft",
+    feed_yt:"YOUTUBE", feed_x:"X / TWITTER", feed_ig:"INSTAGRAM", feed_tt:"TIKTOK",
+    yt_subs:"Música · Artistas IA · Web3",
+    yt_latest:"ÚLTIMO EN EL CANAL",
+    yt_video_title:"#truevoiceNFT trailer — la revolución empieza",
+    yt_follow:"SUSCRIBIRSE",
+    tweet1:"La música vivía en Spotify. Las series vivían en Netflix. Nunca se encontraron — hasta ahora. 🐾 #TrueVoice #Ruffus #Web3Music",
+    tweet2:"333 Genesis RuFans. Q4 2026. Un NFT. Membresía permanente en la historia. ¿Estás dentro? 🔗 #RUFANS #Solana",
+    x_follow:"SEGUIR",
     ig_placeholder:"Sigue a <strong style='color:var(--gold-lt)'>@truevoicenft</strong> en Instagram para contenido exclusivo, drops de personajes y actualizaciones del universo Ruffus.",
-    ig_follow_btn:"SEGUIR EN INSTAGRAM", ig_note:"Feed en vivo vía Elfsight — próximamente",
+    ig_follow_btn:"SEGUIR",
     tt_placeholder:"Los últimos clips de Ruffus, making-of y experimentos de música IA en TikTok. Contenido actualizado semanalmente.",
     tt_follow_btn:"SEGUIR EN TIKTOK",
+    tt_music:"MÚSICA", tt_clips:"CLIPS", tt_ruffus:"RUFFUS",
     spotify_label:"LA MÚSICA", spotify_title:"Escucha<br><span>el universo.</span>",
     footer_contact:"Consultas comerciales:", footer_privacy:"Política de Privacidad", footer_cookies:"Política de Cookies",
     cookie_text:'Este sitio usa cookies para mejorar tu experiencia. <a href="#">Política de Cookies</a>.',
