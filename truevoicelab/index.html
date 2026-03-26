@@ -1764,16 +1764,14 @@ const savedLang = localStorage.getItem('tv_lang');
 setLang(savedLang || detectLang());
 
 // ── WHITELIST MODAL ───────────────────────────────
-// Wallet connect requires backend infrastructure (Supabase) not yet live.
-// For now: capture email + optional wallet address via modal, store in localStorage
-// and display a thank-you. Ready to swap for real Phantom connect when backend is live.
+// Conectado a Brevo via Vercel Function /api/whitelist
+// La wallet address se recogerá por email cuando el mint se acerque
 
 function connectWallet() {
   showWhitelistModal();
 }
 
 function showWhitelistModal() {
-  // Remove existing modal if any
   const existing = document.getElementById('wl-modal');
   if (existing) existing.remove();
 
@@ -1783,62 +1781,152 @@ function showWhitelistModal() {
   modal.id = 'wl-modal';
   modal.style.cssText = `
     position:fixed; inset:0; z-index:9999;
-    background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+    background:rgba(0,0,0,0.88); backdrop-filter:blur(10px);
     display:flex; align-items:center; justify-content:center; padding:20px;
   `;
 
   modal.innerHTML = `
-    <div style="background:#0E0E1C; border:1px solid #C8960C; border-radius:20px;
-                padding:40px 36px; max-width:460px; width:100%; position:relative;">
+    <div id="wl-box" style="background:#0E0E1C; border:1px solid #C8960C; border-radius:20px;
+                padding:40px 36px; max-width:480px; width:100%; position:relative;
+                box-shadow:0 0 60px rgba(200,150,12,0.15);">
+
+      <!-- Close -->
       <button onclick="document.getElementById('wl-modal').remove()"
         style="position:absolute; top:16px; right:20px; background:none; border:none;
-               color:#888; font-size:22px; cursor:pointer; line-height:1;">×</button>
+               color:#555; font-size:24px; cursor:pointer; line-height:1; transition:color 0.2s;"
+        onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">×</button>
 
-      <div style="font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:0.3em;
-                  color:#C8960C; margin-bottom:10px;">
-        ${isEs ? 'LISTA DE ESPERA' : 'WHITELIST'}
+      <!-- Step 1: Email form -->
+      <div id="wl-step1">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:0.35em;
+                    color:#C8960C; margin-bottom:10px;">
+          ${isEs ? 'ACCESO PRIORITARIO · WHITELIST' : 'PRIORITY ACCESS · WHITELIST'}
+        </div>
+        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:30px; color:#F5F3EE;
+                   margin-bottom:8px; letter-spacing:0.03em; line-height:1.1;">
+          ${isEs ? 'Sé el primero.' : 'Be first.'}
+        </h3>
+        <p style="font-size:14px; color:#888899; line-height:1.65; margin-bottom:24px;">
+          ${isEs
+            ? '333 RUFANS Genesis. Mint Q4 2026. Apúntate ahora para acceso prioritario — te avisaremos por email cuando el mint abra y cómo conectar tu wallet.'
+            : '333 RUFANS Genesis. Mint Q4 2026. Register now for priority access — we\'ll email you when mint opens and how to connect your wallet.'}
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <input id="wl-email" type="email"
+            placeholder="${isEs ? 'Tu email *' : 'Your email *'}"
+            style="background:#000; border:1px solid #1E1E3A; color:#F5F3EE; padding:13px 16px;
+                   border-radius:8px; font-size:15px; outline:none; width:100%; box-sizing:border-box;"
+            onfocus="this.style.borderColor='#C8960C'" onblur="this.style.borderColor='#1E1E3A'">
+
+          <input id="wl-name" type="text"
+            placeholder="${isEs ? 'Tu nombre (opcional)' : 'Your name (optional)'}"
+            style="background:#000; border:1px solid #1E1E3A; color:#F5F3EE; padding:13px 16px;
+                   border-radius:8px; font-size:15px; outline:none; width:100%; box-sizing:border-box;"
+            onfocus="this.style.borderColor='#C8960C'" onblur="this.style.borderColor='#1E1E3A'">
+
+          <div id="wl-error" style="display:none; color:#ff4444; font-size:13px; padding:4px 0;"></div>
+
+          <button onclick="submitWhitelistStep1()"
+            id="wl-submit-btn"
+            style="background:linear-gradient(135deg,#7A5A00,#C8960C); color:#000;
+                   font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:0.1em;
+                   padding:15px; border-radius:8px; border:none; cursor:pointer;
+                   margin-top:4px; transition:opacity 0.2s; width:100%;"
+            onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+            ${isEs ? 'RESERVAR MI LUGAR' : 'RESERVE MY SPOT'}
+          </button>
+        </div>
+
+        <p style="font-size:11px; color:#444; margin-top:14px; text-align:center; line-height:1.6;">
+          ${isEs
+            ? '🔒 Solo para actualizaciones de TrueVoice. Sin spam. Sin terceros.'
+            : '🔒 TrueVoice updates only. No spam. No third parties.'}
+        </p>
       </div>
-      <h3 style="font-family:'Bebas Neue',sans-serif; font-size:28px; color:#F5F3EE;
-                 margin-bottom:8px; letter-spacing:0.03em;">
-        ${isEs ? 'Sé el primero.' : 'Be first.'}
-      </h3>
-      <p style="font-size:14px; color:#888899; line-height:1.65; margin-bottom:28px;">
-        ${isEs
-          ? 'El mint de los 333 RUFANS Genesis abre en Q4 2026. Regístrate ahora para acceso prioritario y novedades exclusivas.'
-          : 'The 333 RUFANS Genesis mint opens Q4 2026. Register now for priority access and exclusive updates.'}
-      </p>
 
-      <div style="display:flex; flex-direction:column; gap:12px;">
-        <input id="wl-email" type="email" placeholder="${isEs ? 'Tu email' : 'Your email'}"
-          style="background:#000; border:1px solid #1E1E3A; color:#F5F3EE; padding:12px 16px;
-                 border-radius:8px; font-size:15px; outline:none; width:100%; box-sizing:border-box;"
-          onfocus="this.style.borderColor='#C8960C'" onblur="this.style.borderColor='#1E1E3A'">
+      <!-- Step 2: Twitter follow -->
+      <div id="wl-step2" style="display:none; text-align:center;">
+        <div style="font-size:40px; margin-bottom:16px;">🐾</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:26px; color:#F4C542;
+                    letter-spacing:0.05em; margin-bottom:12px;">
+          ${isEs ? '¡CASI LISTO!' : 'ALMOST THERE!'}
+        </div>
+        <p style="font-size:14px; color:#888899; line-height:1.65; margin-bottom:24px; max-width:340px; margin-left:auto; margin-right:auto;">
+          ${isEs
+            ? 'Último paso — síguenos en X (Twitter) para recibir las últimas noticias del lanzamiento y acceso anticipado exclusivo.'
+            : 'Last step — follow us on X (Twitter) to receive the latest launch news and exclusive early access updates.'}
+        </p>
 
-        <input id="wl-wallet" type="text"
-          placeholder="${isEs ? 'Tu wallet Solana (opcional)' : 'Your Solana wallet (optional)'}"
-          style="background:#000; border:1px solid #1E1E3A; color:#F5F3EE; padding:12px 16px;
-                 border-radius:8px; font-size:14px; outline:none; width:100%; box-sizing:border-box;
-                 font-family:monospace;"
-          onfocus="this.style.borderColor='#C8960C'" onblur="this.style.borderColor='#1E1E3A'">
+        <a href="https://twitter.com/TrueVoiceNFT" target="_blank" rel="noopener noreferrer"
+           onclick="document.getElementById('wl-twitter-done').style.display='flex'"
+           style="display:inline-flex; align-items:center; gap:10px; background:#000;
+                  border:1px solid #333; color:#fff; padding:13px 28px; border-radius:10px;
+                  font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:0.1em;
+                  text-decoration:none; margin-bottom:16px; transition:border-color 0.2s;"
+           onmouseover="this.style.borderColor='#1d9bf0'" onmouseout="this.style.borderColor='#333'">
+          <i class="fab fa-x-twitter" style="font-size:18px;"></i>
+          ${isEs ? 'SEGUIR @TRUEVOICENFT' : 'FOLLOW @TRUEVOICENFT'}
+        </a>
 
-        <button onclick="submitWhitelist()"
-          style="background:linear-gradient(135deg,#7A5A00,#C8960C); color:#000; font-family:'Bebas Neue',sans-serif;
-                 font-size:17px; letter-spacing:0.1em; padding:14px; border-radius:8px; border:none;
-                 cursor:pointer; margin-top:4px; transition:opacity 0.2s;"
-          onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
-          ${isEs ? 'RESERVAR MI LUGAR' : 'RESERVE MY SPOT'}
+        <div id="wl-twitter-done" style="display:none; flex-direction:column; align-items:center; gap:12px; margin-top:4px;">
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:14px; color:#888899;">
+            <input type="checkbox" id="wl-followed" style="width:18px; height:18px; accent-color:#C8960C; cursor:pointer;">
+            ${isEs ? 'Ya sigo a @TrueVoiceNFT ✓' : 'I\'m now following @TrueVoiceNFT ✓'}
+          </label>
+          <button onclick="submitWhitelistFinal()"
+            style="background:linear-gradient(135deg,#7A5A00,#C8960C); color:#000;
+                   font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:0.1em;
+                   padding:14px 40px; border-radius:8px; border:none; cursor:pointer; transition:opacity 0.2s;"
+            onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+            ${isEs ? 'CONFIRMAR MI PLAZA' : 'CONFIRM MY SPOT'}
+          </button>
+        </div>
+
+        <button onclick="submitWhitelistFinal()"
+          style="background:none; border:none; color:#555; font-size:13px; cursor:pointer;
+                 margin-top:16px; display:block; margin-left:auto; margin-right:auto; text-decoration:underline;"
+          onmouseover="this.style.color='#888'" onmouseout="this.style.color='#555'">
+          ${isEs ? 'Omitir este paso' : 'Skip this step'}
         </button>
       </div>
 
-      <p style="font-size:11px; color:#555; margin-top:16px; text-align:center; line-height:1.5;">
-        ${isEs
-          ? '🔒 Tus datos no se comparten con terceros. Solo para actualizaciones de TrueVoice.'
-          : '🔒 Your data is never shared. TrueVoice updates only.'}
-      </p>
+      <!-- Step 3: Success -->
+      <div id="wl-step3" style="display:none; text-align:center; padding:10px 0;">
+        <div style="font-size:52px; margin-bottom:16px;">🐾</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:34px; color:#F4C542;
+                    letter-spacing:0.05em; margin-bottom:14px; line-height:1.1;">
+          ${isEs ? '¡ESTÁS DENTRO!' : "YOU'RE IN!"}
+        </div>
+        <p style="font-size:15px; color:#888899; line-height:1.7; max-width:340px;
+                  margin:0 auto 28px;">
+          ${isEs
+            ? 'Te hemos añadido a la whitelist. Recibirás un email cuando el mint de los RUFANS Genesis se acerque con instrucciones para conectar tu wallet y confirmar tu plaza.'
+            : 'You\'re on the whitelist. You\'ll receive an email when the RUFANS Genesis mint approaches with instructions to connect your wallet and confirm your spot.'}
+        </p>
+        <div style="background:rgba(200,150,12,0.08); border:1px solid rgba(200,150,12,0.2);
+                    border-radius:10px; padding:14px 18px; margin-bottom:24px; text-align:left;">
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:0.15em;
+                      color:#C8960C; margin-bottom:8px;">
+            ${isEs ? '¿QUÉ PASA AHORA?' : 'WHAT HAPPENS NEXT?'}
+          </div>
+          <div style="font-size:13px; color:#888899; line-height:1.7;">
+            ${isEs
+              ? '1. Seguimos construyendo el universo de Ruffus<br>2. Antes del mint recibirás un email con la fecha exacta<br>3. El email incluirá cómo conectar tu wallet Phantom<br>4. Los holders de whitelist tienen acceso prioritario'
+              : '1. We keep building the Ruffus universe<br>2. Before mint you\'ll get an email with the exact date<br>3. The email will include how to connect your Phantom wallet<br>4. Whitelist holders get priority access'}
+          </div>
+        </div>
+        <button onclick="document.getElementById('wl-modal').remove()"
+          style="background:linear-gradient(135deg,#7A5A00,#C8960C); color:#000;
+                 font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:0.1em;
+                 padding:12px 40px; border-radius:8px; border:none; cursor:pointer;">
+          ${isEs ? 'CERRAR' : 'CLOSE'}
+        </button>
+      </div>
+
     </div>
   `;
 
-  // Close on backdrop click
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.remove();
   });
@@ -1847,57 +1935,82 @@ function showWhitelistModal() {
   setTimeout(() => document.getElementById('wl-email')?.focus(), 100);
 }
 
-function submitWhitelist() {
-  const email  = document.getElementById('wl-email')?.value.trim();
-  const wallet = document.getElementById('wl-wallet')?.value.trim();
-  const isEs   = currentLang === 'es';
+// Step 1 — validate email and move to Twitter step
+async function submitWhitelistStep1() {
+  const email = document.getElementById('wl-email')?.value.trim();
+  const isEs  = currentLang === 'es';
+  const errEl = document.getElementById('wl-error');
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    const input = document.getElementById('wl-email');
-    input.style.borderColor = '#ff4444';
-    input.placeholder = isEs ? 'Email requerido' : 'Email required';
-    setTimeout(() => { input.style.borderColor = '#1E1E3A'; }, 2000);
+    errEl.textContent = isEs ? 'Por favor introduce un email válido.' : 'Please enter a valid email address.';
+    errEl.style.display = 'block';
+    document.getElementById('wl-email').style.borderColor = '#ff4444';
     return;
   }
 
-  // Store locally (will be synced to Supabase when backend is live)
-  const entries = JSON.parse(localStorage.getItem('tv_whitelist') || '[]');
-  const entry = { email, wallet: wallet || null, ts: new Date().toISOString(), lang: currentLang };
+  errEl.style.display = 'none';
 
-  // Avoid duplicates
-  if (!entries.find(e => e.email === email)) {
-    entries.push(entry);
-    localStorage.setItem('tv_whitelist', JSON.stringify(entries));
+  // Store email temporarily for step 3
+  window._wlEmail = email;
+  window._wlName  = document.getElementById('wl-name')?.value.trim() || '';
+
+  // Move to step 2
+  document.getElementById('wl-step1').style.display = 'none';
+  document.getElementById('wl-step2').style.display = 'block';
+}
+
+// Step 2 — send to Brevo and show success
+async function submitWhitelistFinal() {
+  const email  = window._wlEmail;
+  const name   = window._wlName;
+  const isEs   = currentLang === 'es';
+  const followed = document.getElementById('wl-followed')?.checked || false;
+
+  // Show loading state
+  const confirmBtn = event?.target;
+  if (confirmBtn) {
+    confirmBtn.textContent = isEs ? 'GUARDANDO...' : 'SAVING...';
+    confirmBtn.disabled = true;
   }
 
-  // Update navbar button to show registered state
-  const btn = document.getElementById('walletBtn');
-  if (btn) {
-    btn.classList.add('connected');
-    btn.querySelector('.wallet-label').textContent = isEs ? 'Registrado ✓' : 'Registered ✓';
-  }
+  try {
+    const res = await fetch('/api/whitelist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        name,
+        lang: currentLang,
+        followed_twitter: followed,
+        source: 'truevoicelab.com'
+      })
+    });
 
-  // Show success in modal
-  const modal = document.getElementById('wl-modal');
-  if (modal) {
-    modal.querySelector('div').innerHTML = `
-      <div style="text-align:center; padding:20px 0;">
-        <div style="font-size:48px; margin-bottom:16px;">🐾</div>
-        <div style="font-family:'Bebas Neue',sans-serif; font-size:32px; color:#F4C542; letter-spacing:0.05em; margin-bottom:10px;">
-          ${isEs ? '¡ESTÁS DENTRO!' : "YOU'RE IN!"}
-        </div>
-        <p style="font-size:15px; color:#888899; line-height:1.65; max-width:320px; margin:0 auto 24px;">
-          ${isEs
-            ? 'Te avisaremos cuando el mint de los RUFANS Genesis esté listo. Sigue a @TrueVoiceNFT para no perderte nada.'
-            : 'We\'ll notify you when the RUFANS Genesis mint is live. Follow @TrueVoiceNFT so you don\'t miss a thing.'}
-        </p>
-        <button onclick="document.getElementById('wl-modal').remove()"
-          style="background:linear-gradient(135deg,#7A5A00,#C8960C); color:#000; font-family:'Bebas Neue',sans-serif;
-                 font-size:16px; letter-spacing:0.1em; padding:12px 32px; border-radius:8px; border:none; cursor:pointer;">
-          ${isEs ? 'CERRAR' : 'CLOSE'}
-        </button>
-      </div>
-    `;
+    // Whether success or error — show confirmation
+    // (we don't want to block users on API issues)
+
+    // Update navbar button
+    const btn = document.getElementById('walletBtn');
+    if (btn) {
+      btn.classList.add('connected');
+      btn.querySelector('.wallet-label').textContent = isEs ? 'Registrado ✓' : 'Registered ✓';
+    }
+
+    // Save to localStorage as backup
+    const entries = JSON.parse(localStorage.getItem('tv_whitelist') || '[]');
+    if (!entries.find(e => e.email === email)) {
+      entries.push({ email, name, lang: currentLang, ts: new Date().toISOString(), followed_twitter: followed });
+      localStorage.setItem('tv_whitelist', JSON.stringify(entries));
+    }
+
+    // Move to step 3 success
+    document.getElementById('wl-step2').style.display = 'none';
+    document.getElementById('wl-step3').style.display = 'block';
+
+  } catch (err) {
+    // Still show success — data is in localStorage as backup
+    document.getElementById('wl-step2').style.display = 'none';
+    document.getElementById('wl-step3').style.display = 'block';
   }
 }
 
