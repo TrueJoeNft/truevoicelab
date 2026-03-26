@@ -1,12 +1,10 @@
 export default async function handler(req, res) {
-  // Solo aceptar POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, wallet, lang } = req.body;
+  const { email, name, lang, followed_twitter, source } = req.body;
 
-  // Validar email
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email' });
   }
@@ -24,9 +22,10 @@ export default async function handler(req, res) {
         listIds: [3],
         updateEnabled: true,
         attributes: {
-          WALLET: wallet || '',
+          FIRSTNAME: name || '',
           LANG: lang || 'en',
-          SOURCE: 'truevoicelab.com whitelist'
+          FOLLOWED_TWITTER: followed_twitter ? 'yes' : 'no',
+          SOURCE: source || 'truevoicelab.com'
         }
       })
     });
@@ -37,4 +36,13 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // Contact already exists — still a success for the
+    if (data.code === 'duplicate_parameter') {
+      return res.status(200).json({ success: true, duplicate: true });
+    }
+
+    return res.status(500).json({ error: 'Brevo error', detail: data });
+
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error', detail: err.message });
+  }
+}
