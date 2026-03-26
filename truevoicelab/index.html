@@ -1038,13 +1038,29 @@
       <h2 class="section-title" data-t="project_title">Music and artists evolve.<br><span>We reshape how.</span></h2>
     </div>
     <div class="project-grid">
-      <div class="project-video-wrap reveal">
-        <iframe src="https://www.youtube.com/watch?v=QFSyiiETInw"
-          title="TrueVoice Introduction"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          loading="lazy"></iframe>
+      <div class="reveal">
+        <a href="https://www.youtube.com/watch?v=QFSyiiETInw" target="_blank" rel="noopener noreferrer"
+           style="display:block; position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--border); cursor:pointer; text-decoration:none;"
+           onmouseover="this.querySelector('.play-overlay').style.background='rgba(200,150,12,0.85)'"
+           onmouseout="this.querySelector('.play-overlay').style.background='rgba(0,0,0,0.55)'">
+          <!-- YouTube thumbnail -->
+          <img src="img/ruffus-thumbnail.png"
+               alt="Ruffus — TrueVoice Trailer"
+               style="width:100%; display:block; aspect-ratio:16/9; object-fit:cover;">
+          <!-- Play button overlay -->
+          <div class="play-overlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.55); transition:background 0.3s;">
+            <div style="width:72px; height:72px; border-radius:50%; background:var(--gold); display:flex; align-items:center; justify-content:center; box-shadow:0 0 30px rgba(200,150,12,0.5);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <!-- Duration badge -->
+          <div style="position:absolute; bottom:12px; right:12px; background:rgba(0,0,0,0.8); color:#fff; font-size:12px; padding:3px 8px; border-radius:4px; font-family:monospace;">1:42</div>
+        </a>
+        <div style="margin-top:14px; background:linear-gradient(135deg,#0a0a0a,#0e0e1c); border-left:3px solid var(--gold); border-radius:0 8px 8px 0; padding:14px 18px;">
+          <p style="font-size:14px; color:var(--muted); font-style:italic; line-height:1.6; margin:0;" data-t="video_caption">
+            Before AI could generate video, we got here frame by frame — Midjourney images, manual 3D, hand-animated sequences. <strong style="color:var(--gold-lt)">You can't imagine what's coming next.</strong>
+          </p>
+        </div>
       </div>
       <div class="project-text reveal">
         <h3 data-t="project_sub">A Brief Introduction</h3>
@@ -1360,6 +1376,9 @@
           <div style="flex:1; background:url('img/TrueVoiceArtistRuffus3.png') center/contain no-repeat, #080818; min-height:180px; opacity:0.7;"></div>
           <!-- Caption -->
           <div style="padding:12px 14px;">
+            <p style="font-size:13px; color:var(--muted); line-height:1.5; margin:0;" data-t="ig_placeholder">
+              Follow <strong style="color:var(--gold-lt)">@truevoicenft</strong> for behind-the-scenes, character drops and Ruffus universe updates.
+            </p>
           </div>
         </div>
         <a href="https://instagram.com/truevoicenft" target="_blank" rel="noopener noreferrer"
@@ -1486,6 +1505,7 @@ const T = {
     hero_cta_primary:"Meet Ruffus", hero_cta_secondary:"How It Works",
     project_label:"THE PROJECT",
     project_title:"Music and artists evolve.<br><span>We reshape how.</span>",
+    video_caption:"Before AI could generate video, we got here frame by frame — Midjourney images, manual 3D, hand-animated sequences. <strong style='color:var(--gold-lt)'>You can't imagine what's coming next.</strong>",
     project_sub:"A Brief Introduction",
     project_p1:"New times bring new artists — and new ways to experience them. <strong>TrueVoice is where that evolution lands.</strong> A label where AI-born artists build their universe across music, animated series, and live experiences — all community-owned, all community-funded.",
     project_p2:"Each chapter of a TrueVoice artist's story becomes a song. Each song deepens the world. You don't just listen — <strong>you live the experience</strong>. And as the line between AI artists and real ones blurs, TrueVoice becomes the bridge where both worlds meet: real artists who want a digital identity, and AI artists who break into reality.",
@@ -1568,6 +1588,7 @@ const T = {
     hero_cta_primary:"Conoce a Ruffus", hero_cta_secondary:"Cómo Funciona",
     project_label:"EL PROYECTO",
     project_title:"La música y los artistas evolucionan.<br><span>Nosotros redefinimos cómo.</span>",
+    video_caption:"Antes de que la IA pudiera generar video, llegamos aquí frame a frame — imágenes de Midjourney, 3D manual, secuencias animadas a mano. <strong style='color:var(--gold-lt)'>No te imaginas lo que viene.</strong>",
     project_sub:"Una breve introducción",
     project_p1:"Los nuevos tiempos traen nuevos artistas — y nuevas formas de vivirlos. <strong>TrueVoice es donde esa evolución toma forma.</strong> Un sello donde artistas nacidos con IA construyen su universo a través de música, series animadas y experiencias en vivo — todo poseído y financiado por la comunidad.",
     project_p2:"Cada capítulo de la historia de un artista TrueVoice se convierte en canción. Cada canción profundiza el mundo. No solo escuchas — <strong>vives la experiencia</strong>. Y a medida que la línea entre artistas IA y reales se difumina, TrueVoice se convierte en el puente: artistas reales que quieren una identidad digital, y artistas IA que irrumpen en la realidad.",
