@@ -22,10 +22,10 @@ export default async function handler(req, res) {
         listIds: [3],
         updateEnabled: true,
         attributes: {
-          FIRSTNAME: name || '',
-          LANG: lang || 'en',
-          FOLLOWED_TWITTER: followed_twitter ? 'yes' : 'no',
-          SOURCE: source || 'truevoicelab.com'
+          NOMBRE: name || '',
+          TWITTER_FOLLOW: followed_twitter ? 'yes' : 'no',
+          SOURCE: source || 'truevoicelab.com',
+          LANG: lang || 'en'
         }
       })
     });
