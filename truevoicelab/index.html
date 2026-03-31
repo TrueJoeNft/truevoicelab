@@ -300,13 +300,13 @@
     .ruffus-3d-label span {
       display: block;
       font-family: var(--font-display);
-      font-size: 18px;
+      font-size: 36px;
       letter-spacing: 0.25em;
       color: var(--gold-lt);
       animation: pulse-gold 2.5s ease-in-out infinite;
     }
     .ruffus-3d-sub {
-      font-size: 10px !important;
+      font-size: 20px !important;
       letter-spacing: 0.18em !important;
       color: var(--muted) !important;
       margin-top: 4px;
@@ -373,9 +373,9 @@
       animation: fadeUp 0.8s 1.4s forwards;
     }
     .nft-card {
-      width: 80px;
-      height: 80px;
-      border-radius: 14px;
+      width: 160px;
+      height: 160px;
+      border-radius: 18px;
       object-fit: cover;
       border: 1px solid var(--border);
       cursor: pointer;
@@ -418,7 +418,7 @@
         width: clamp(240px, 70vw, 380px);
         height: clamp(240px, 70vw, 380px);
       }
-      .nft-card { width: 60px; height: 60px; }
+      .nft-card { width: 100px; height: 100px; }
     }
 
     /* ── SECTION BASE ────────────────────────────────── */
@@ -433,14 +433,14 @@
     }
     .section-label {
       font-family: var(--font-display);
-      font-size: 12px;
+      font-size: 24px;
       letter-spacing: 0.35em;
       color: var(--gold-dim);
       margin-bottom: 12px;
     }
     .section-title {
       font-family: var(--font-display);
-      font-size: clamp(42px, 6vw, 80px);
+      font-size: clamp(84px, 12vw, 160px);
       line-height: 1;
       letter-spacing: 0.03em;
       margin-bottom: 20px;
@@ -1203,8 +1203,8 @@ canvas.addEventListener('pointerup',   () => { setTimeout(() => { controls.autoR
 
 // ── DRACO ──────────────────────────────────────────
 const draco = new DRACOLoader();
-draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-draco.setDecoderConfig({ type: 'js' });
+draco.setDecoderPath('https://unpkg.com/three@0.134.0/examples/js/libs/draco/gltf/');
+draco.setDecoderConfig({ type: 'wasm' });
 
 // ── LOAD MODEL ─────────────────────────────────────
 const loader = new GLTFLoader();
@@ -1216,30 +1216,30 @@ let targetScaleF = 1.0;
 let currentScaleF = 1.0;
 let isEnlarged = false;
 
+function setupMesh(gltf) {
+  ruffusMesh = gltf.scene;
+  const box    = new THREE.Box3().setFromObject(ruffusMesh);
+  const center = box.getCenter(new THREE.Vector3());
+  const size   = box.getSize(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z);
+  baseScale    = 2.4 / maxDim;
+  ruffusMesh.position.sub(center);
+  ruffusMesh.scale.setScalar(baseScale);
+  ruffusMesh.traverse(child => {
+    if (child.isMesh) {
+      child.castShadow = true;
+      if (child.material) child.material.envMapIntensity = 0.5;
+    }
+  });
+  scene.add(ruffusMesh);
+  loading.style.opacity = '0';
+  setTimeout(() => { loading.style.display = 'none'; }, 400);
+}
+
+// Try loading — if DRACO fails, retry without it
 loader.load(
-  'img/Ruffus.glb',
-  (gltf) => {
-    ruffusMesh = gltf.scene;
-    const box    = new THREE.Box3().setFromObject(ruffusMesh);
-    const center = box.getCenter(new THREE.Vector3());
-    const size   = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    baseScale    = 2.4 / maxDim;
-
-    ruffusMesh.position.sub(center);
-    ruffusMesh.scale.setScalar(baseScale);
-
-    ruffusMesh.traverse(child => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        if (child.material) child.material.envMapIntensity = 0.5;
-      }
-    });
-
-    scene.add(ruffusMesh);
-    loading.style.opacity = '0';
-    setTimeout(() => { loading.style.display = 'none'; }, 400);
-  },
+  'img/Ruffus-v1.glb',
+  setupMesh,
   (prog) => {
     if (prog.total > 0) {
       const p = Math.round((prog.loaded / prog.total) * 100);
@@ -1248,8 +1248,25 @@ loader.load(
     }
   },
   (err) => {
-    console.error('GLB error:', err);
-    loadText.textContent = 'Error loading 3D model';
+    console.warn('DRACO load failed, retrying without DRACO:', err);
+    loadText.textContent = 'Retrying...';
+    // Retry without DRACO
+    const loaderNoDraco = new GLTFLoader();
+    loaderNoDraco.load(
+      'img/Ruffus-v1.glb',
+      setupMesh,
+      (prog) => {
+        if (prog.total > 0) {
+          const p = Math.round((prog.loaded / prog.total) * 100);
+          loadFill.style.width = p + '%';
+          loadText.textContent = `Loading... ${p}%`;
+        }
+      },
+      (err2) => {
+        console.error('GLB load failed completely:', err2);
+        loadText.textContent = 'Could not load 3D model';
+      }
+    );
   }
 );
 
@@ -1773,7 +1790,7 @@ animate();
 <section id="spotify-section">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-label" data-t="spotify_label">THE MUSIC</div>
+      <div class="section-label" data-t="spotify_label">TRUEVOICE SPOTIFY PLAYLISTS</div>
       <h2 class="section-title" data-t="spotify_title">Listen to<br><span>the universe.</span></h2>
     </div>
     <div class="spotify-grid reveal">
@@ -1931,7 +1948,7 @@ const T = {
     tt_placeholder:"The latest Ruffus clips, making-of moments, and AI music experiments live on TikTok. Short-form content updated weekly.",
     tt_follow_btn:"FOLLOW ON TIKTOK",
     tt_music:"MUSIC", tt_clips:"CLIPS", tt_ruffus:"RUFFUS",
-    spotify_label:"THE MUSIC", spotify_title:"Listen to<br><span>the universe.</span>",
+    spotify_label:"TRUEVOICE SPOTIFY PLAYLISTS", spotify_title:"Listen to<br><span>the universe.</span>",
     footer_contact:"Business enquiries:", footer_privacy:"Privacy Policy", footer_cookies:"Cookie Policy",
     cookie_text:'This website uses cookies to improve your experience. <a href="#">Cookie Policy</a>.',
     cookie_policy:"Cookie Policy", cookie_btn:"Got it",
@@ -2022,7 +2039,7 @@ const T = {
     tt_placeholder:"Los últimos clips de Ruffus, making-of y experimentos de música IA en TikTok. Contenido actualizado semanalmente.",
     tt_follow_btn:"SEGUIR EN TIKTOK",
     tt_music:"MÚSICA", tt_clips:"CLIPS", tt_ruffus:"RUFFUS",
-    spotify_label:"LA MÚSICA", spotify_title:"Escucha<br><span>el universo.</span>",
+    spotify_label:"TRUEVOICE SPOTIFY PLAYLISTS", spotify_title:"Escucha<br><span>el universo.</span>",
     footer_contact:"Consultas comerciales:", footer_privacy:"Política de Privacidad", footer_cookies:"Política de Cookies",
     cookie_text:'Este sitio usa cookies para mejorar tu experiencia. <a href="#">Política de Cookies</a>.',
     cookie_policy:"Política de Cookies", cookie_btn:"Entendido",
