@@ -1298,7 +1298,7 @@ window.addEventListener('load', function() {
   // ── CLICK TO ENLARGE (desktop) ─────────────────
   canvas.addEventListener('click', function() {
     isEnlarged   = !isEnlarged;
-    targetScaleF = isEnlarged ? 1.2 : 1.0;
+    targetScaleF = isEnlarged ? 1.6 : 1.0;
   });
 
   // ── TAP TO ENLARGE (mobile) ─────────────────────
@@ -1314,7 +1314,7 @@ window.addEventListener('load', function() {
     var dt = Date.now() - touchStartTime;
     if (dx < 10 && dy < 10 && dt < 300) {
       isEnlarged   = !isEnlarged;
-      targetScaleF = isEnlarged ? 1.2 : 1.0;
+      targetScaleF = isEnlarged ? 1.6 : 1.0;
     }
   }, { passive: true });
 
@@ -1499,7 +1499,7 @@ window.addEventListener('load', function() {
       });
       if (!enlarged) {
         card.dataset.enlarged = 'true';
-        card.style.transform = 'scale(1.2) translateY(-8px)';
+        card.style.transform = 'scale(1.8) translateY(-8px)';
         card.style.zIndex = '10';
         card.style.borderColor = 'var(--gold)';
       }
