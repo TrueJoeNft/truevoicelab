@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrueVoice — Whitepaper v2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:     #C8960C;
+  --gold-lt:  #F4C542;
+  --gold-dim: #7A5A00;
+  --black:    #000000;
+  --dark:     #080810;
+  --card:     #0C0C18;
+  --border:   #1A1A2E;
+  --white:    #F5F3EE;
+  --muted:    #888899;
+  --font-d:   'Bebas Neue', sans-serif;
+  --font-b:   'DM Sans', sans-serif;
+  --font-m:   'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-b);
+  font-size: 16px;
+  line-height: 1.7;
+}
+a { color: var(--gold-lt); text-decoration: none; }
+
+/* ── COVER ── */
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 30%, rgba(200,150,12,0.08) 0%, transparent 70%);
+}
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 60px,
+    rgba(200,150,12,0.03) 60px, rgba(200,150,12,0.03) 61px
+  ), repeating-linear-gradient(
+    90deg, transparent, transparent 60px,
+    rgba(200,150,12,0.03) 60px, rgba(200,150,12,0.03) 61px
+  );
+}
+.cover-logo {
+  font-family: var(--font-d);
+  font-size: clamp(80px, 15vw, 160px);
+  line-height: 0.9;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  position: relative;
+  z-index: 1;
+}
+.cover-logo span { color: var(--gold-lt); }
+.cover-tag {
+  font-family: var(--font-d);
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  margin-top: 16px;
+  position: relative;
+  z-index: 1;
+}
+.cover-line {
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 32px auto;
+  position: relative;
+  z-index: 1;
+}
+.cover-title {
+  font-family: var(--font-d);
+  font-size: clamp(20px, 4vw, 36px);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+}
+.cover-meta {
+  margin-top: 48px;
+  font-family: var(--font-m);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--gold-dim);
+  position: relative;
+  z-index: 1;
+}
+.cover-meta span { color: var(--gold); }
+.cover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--gold-dim);
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-family: var(--font-d);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── LAYOUT ── */
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+.page + .page { padding-top: 0; }
+
+/* ── TOC ── */
+.toc {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px 48px;
+  margin-bottom: 80px;
+}
+.toc-title {
+  font-family: var(--font-d);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  margin-bottom: 24px;
+}
+.toc-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 40px;
+}
+.toc-list li a {
+  font-family: var(--font-b);
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: color 0.2s;
+}
+.toc-list li a:hover { color: var(--gold-lt); }
+.toc-num {
+  font-family: var(--font-m);
+  font-size: 11px;
+  color: var(--gold-dim);
+  min-width: 24px;
+}
+
+/* ── SECTION HEADERS ── */
+.s-label {
+  font-family: var(--font-d);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  margin-bottom: 8px;
+}
+.s-title {
+  font-family: var(--font-d);
+  font-size: clamp(48px, 7vw, 80px);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+.s-title span { color: var(--gold-lt); }
+.s-body {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 680px;
+  line-height: 1.75;
+  margin-bottom: 48px;
+}
+.s-body strong { color: var(--white); }
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 80px 0;
+}
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-left: 3px solid var(--gold);
+  padding: 20px 24px;
+  background: rgba(200,150,12,0.05);
+  border-radius: 0 8px 8px 0;
+  margin: 32px 0;
+  font-size: 15px;
+  color: var(--white);
+  line-height: 1.65;
+}
+.callout.warn {
+  border-color: #ff8c00;
+  background: rgba(255,140,0,0.05);
+}
+
+/* ── STAT CARDS ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 40px 0;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 24px;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-d);
+  font-size: 44px;
+  color: var(--gold-lt);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-top: 8px;
+  font-family: var(--font-d);
+}
+
+/* ── TOKEN DISTRIBUTION CHART ── */
+.chart-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px;
+  margin: 40px 0;
+}
+.chart-title {
+  font-family: var(--font-d);
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.chart-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+.donut-container {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.donut-svg { flex-shrink: 0; }
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.legend-name { color: var(--white); flex: 1; }
+.legend-pct {
+  font-family: var(--font-m);
+  color: var(--gold);
+  font-size: 13px;
+}
+.legend-tokens {
+  font-family: var(--font-m);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* ── VESTING TIMELINE ── */
+.vesting-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 32px 0;
+}
+.vesting-row {
+  display: grid;
+  grid-template-columns: 160px 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+.vesting-label {
+  font-size: 13px;
+  color: var(--white);
+  font-family: var(--font-b);
+  font-weight: 500;
+}
+.vesting-bar-wrap {
+  height: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+.vesting-bar {
+  height: 100%;
+  border-radius: 5px;
+  position: relative;
+  transition: width 1s ease;
+}
+.vesting-cliff {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 16px;
+  background: var(--gold);
+  border-radius: 1px;
+}
+.vesting-pct {
+  font-family: var(--font-m);
+  font-size: 12px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+/* ── FLOW DIAGRAM ── */
+.flow-diagram {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px;
+  margin: 40px 0;
+  overflow: hidden;
+}
+.flow-title {
+  font-family: var(--font-d);
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  margin-bottom: 32px;
+}
+
+/* ── TIER TABLE ── */
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 32px 0;
+}
+.tier-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: border-color 0.3s;
+}
+.tier-card:hover { border-color: var(--gold-dim); }
+.tier-name {
+  font-family: var(--font-d);
+  font-size: 24px;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+.tier-req {
+  font-family: var(--font-m);
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.tier-perks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tier-perks li {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.4;
+}
+.tier-perks li::before {
+  content: '◆';
+  color: var(--gold-dim);
+  font-size: 8px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+/* ── ROADMAP TIMELINE ── */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+  margin: 40px 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+}
+.tl-item {
+  position: relative;
+  margin-bottom: 40px;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -38px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gold-dim);
+  border: 2px solid var(--black);
+  box-shadow: 0 0 0 2px var(--gold-dim);
+}
+.tl-item.active::before { background: var(--gold-lt); box-shadow: 0 0 12px rgba(244,197,66,0.4); }
+.tl-phase {
+  font-family: var(--font-d);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.tl-title {
+  font-family: var(--font-d);
+  font-size: 24px;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.tl-body {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 600px;
+}
+
+/* ── ROYALTY FLOW ── */
+.royalty-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin: 40px 0;
+  row-gap: 20px;
+}
+.rf-node {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  text-align: center;
+  min-width: 140px;
+}
+.rf-node.gold { border-color: var(--gold-dim); background: rgba(200,150,12,0.08); }
+.rf-icon { font-size: 28px; margin-bottom: 8px; }
+.rf-label {
+  font-family: var(--font-d);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--white);
+}
+.rf-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.rf-arrow {
+  font-size: 20px;
+  color: var(--gold-dim);
+  padding: 0 8px;
+  align-self: center;
+}
+
+/* ── RISK TABLE ── */
+.risk-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 32px 0;
+  font-size: 14px;
+}
+.risk-table th {
+  text-align: left;
+  font-family: var(--font-d);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.risk-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--muted);
+  line-height: 1.5;
+  vertical-align: top;
+}
+.risk-table td:first-child { color: var(--white); font-weight: 500; }
+.risk-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-family: var(--font-d);
+  letter-spacing: 0.1em;
+}
+.risk-badge.low { background: rgba(0,200,100,0.15); color: #00c864; }
+.risk-badge.med { background: rgba(255,180,0,0.15); color: #ffb400; }
+.risk-badge.high { background: rgba(255,60,60,0.15); color: #ff3c3c; }
+
+/* ── LEGAL BOX ── */
+.legal-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  margin: 32px 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.legal-box h4 {
+  font-family: var(--font-d);
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  color: var(--gold-dim);
+  margin-bottom: 12px;
+}
+
+/* ── FOOTER ── */
+.wp-footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.wp-footer-logo {
+  font-family: var(--font-d);
+  font-size: 28px;
+  letter-spacing: 0.08em;
+  color: var(--white);
+}
+.wp-footer-logo span { color: var(--gold-lt); }
+.wp-footer-meta {
+  font-family: var(--font-m);
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.8;
+}
+
+@media (max-width: 700px) {
+  .page { padding: 60px 24px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .tier-grid { grid-template-columns: 1fr; }
+  .toc-list { grid-template-columns: 1fr; }
+  .donut-container { flex-direction: column; }
+  .vesting-row { grid-template-columns: 120px 1fr auto; }
+  .cover-logo { font-size: 64px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── COVER ── -->
+<div class="cover">
+  <div class="cover-logo">TRUE<span>VOICE</span></div>
+  <div class="cover-tag">WHITEPAPER v2.0 · APRIL 2026</div>
+  <div class="cover-line"></div>
+  <div class="cover-title">The First AI Record Label Where Fans Own the Story</div>
+  <div class="cover-meta">
+    <div>COMPANY · <span>TrueVoice OÜ</span> · Estonia, European Union</div>
+    <div>BLOCKCHAIN · <span>Solana</span> · SPL Token Standard</div>
+    <div>FIRST ARTIST · <span>Ruffus</span> · Reggaetón-Pop · AI Native</div>
+  </div>
+  <div class="cover-badge">⚠ Not Financial Advice · For Informational Purposes Only</div>
+</div>
+
+<div class="page">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">TABLE OF CONTENTS</div>
+    <ul class="toc-list">
+      <li><a href="#s1"><span class="toc-num">01</span> Executive Summary</a></li>
+      <li><a href="#s2"><span class="toc-num">02</span> The Problem & Vision</a></li>
+      <li><a href="#s3"><span class="toc-num">03</span> The TrueVoice Model</a></li>
+      <li><a href="#s4"><span class="toc-num">04</span> First Artist — Ruffus</a></li>
+      <li><a href="#s5"><span class="toc-num">05</span> Go-to-Market Strategy</a></li>
+      <li><a href="#s6"><span class="toc-num">06</span> Token Architecture</a></li>
+      <li><a href="#s7"><span class="toc-num">07</span> TVOICE Tokenomics</a></li>
+      <li><a href="#s8"><span class="toc-num">08</span> TFANS & RUFANS</a></li>
+      <li><a href="#s9"><span class="toc-num">09</span> Royalty Flow</a></li>
+      <li><a href="#s10"><span class="toc-num">10</span> Use of Funds</a></li>
+      <li><a href="#s11"><span class="toc-num">11</span> Roadmap</a></li>
+      <li><a href="#s12"><span class="toc-num">12</span> Risk Factors</a></li>
+      <li><a href="#s13"><span class="toc-num">13</span> Legal & Compliance</a></li>
+      <li><a href="#s14"><span class="toc-num">14</span> Team</a></li>
+    </ul>
+  </div>
+
+  <!-- 01 EXECUTIVE SUMMARY -->
+  <section id="s1">
+    <div class="s-label">01</div>
+    <h2 class="s-title">Executive<br><span>Summary</span></h2>
+    <p class="s-body">
+      TrueVoice is the first AI-native record label built on community ownership. We develop full creative universes — music, animated series, live events — where fans don't just listen: they <strong>own a piece of the story</strong> and grow with the artist.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">333</div>
+        <div class="stat-label">Genesis RUFANS NFTs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">500M</div>
+        <div class="stat-label">TVOICE Fixed Supply</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">Q4</div>
+        <div class="stat-label">2026 Launch Target</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>The core thesis:</strong> Music lived on Spotify. Stories lived on Netflix. They were always separate — until now. TrueVoice is the platform where an artist's music and their animated universe live in the same world. And for the first time, fans own a piece of both.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 02 PROBLEM & VISION -->
+  <section id="s2">
+    <div class="s-label">02</div>
+    <h2 class="s-title">The Problem<br><span>& Vision</span></h2>
+    <p class="s-body">
+      The music industry concentrates value at the top. Spotify pays artists <strong>$0.003 per stream</strong>. Netflix captures all the value from the stories it distributes. Fans pay repeatedly and own nothing. Artists grind for years with no economic upside for the people who believed first.
+    </p>
+    <p class="s-body">
+      AI has rewritten who gets to create music and tell stories. But the infrastructure for sharing that value hasn't caught up — until TrueVoice.
+    </p>
+
+    <div class="callout">
+      <strong>The founder's conviction:</strong> "I'm a pop-rock artist who decided to stand behind Ruffus as a personal challenge — to prove that AI is a bridge, not a replacement. The AI doesn't feel. Humans do. That's why TrueVoice — the bridge — matters. We don't want to displace artists. We want to make it possible for millions of brilliant minds who have something to say, to say it with music and with stories."
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 03 THE MODEL -->
+  <section id="s3">
+    <div class="s-label">03</div>
+    <h2 class="s-title">The TrueVoice<br><span>Model</span></h2>
+    <p class="s-body">
+      Each TrueVoice artist is a complete creative universe: original music, animated chapter series, live events, and a digital fan community. Every chapter of an artist's story <strong>ends as a song</strong>. Every song deepens the world.
+    </p>
+
+    <!-- Flow: how each artist works -->
+    <div class="flow-diagram">
+      <div class="flow-title">How Each Artist Universe Is Born</div>
+      <div style="display:flex;flex-direction:column;gap:0;">
+
+        <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--border);align-items:start;">
+          <div style="font-family:var(--font-d);font-size:32px;color:var(--gold-dim);line-height:1;text-align:center;">1</div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--gold-lt);letter-spacing:0.06em;margin-bottom:6px;">THE IDEA</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.7;">TrueVoice listens to the community and proposes a story concept and musical genre. What world does this artist inhabit? What conflict drives the narrative? The community validates before anything is built.</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--border);align-items:start;">
+          <div style="font-family:var(--font-d);font-size:32px;color:var(--gold-dim);line-height:1;text-align:center;">2</div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--gold-lt);letter-spacing:0.06em;margin-bottom:6px;">THE IMAGE</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.7;">TrueVoice selects 3 existing NFT communities whose aesthetic aligns with the story and genre decided. TVOICE holders vote to choose which community will define the visual identity of the new artist. This gives dormant NFT communities new purpose — and gives TrueVoice a ready-made fanbase from day one.</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--border);align-items:start;">
+          <div style="font-family:var(--font-d);font-size:32px;color:var(--gold-dim);line-height:1;text-align:center;">3</div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--gold-lt);letter-spacing:0.06em;margin-bottom:6px;">THE CREATOR</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.7;">TrueVoice opens a public call for story creators. Participants submit a brief script outline for Chapter 1. Selected creator receives <strong style="color:var(--white);">300–500 USDC + TVOICE tokens</strong> as reward. Since AI accelerates the creative process, this is an accessible opportunity for writers, storytellers and creators worldwide. The best story wins — not the biggest name.</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--border);align-items:start;">
+          <div style="font-family:var(--font-d);font-size:32px;color:var(--gold-dim);line-height:1;text-align:center;">4</div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--gold-lt);letter-spacing:0.06em;margin-bottom:6px;">THE HUMAN</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.7;">Every AI artist has a human soul behind it. The community helps define what human skills the artist needs — voice, dance movement, charisma, a specific instrument. TrueVoice finds 3 candidates who embody those skills. Holders vote for who becomes the living reference behind the character. If the project demands it (for example, a dancer whose movement defines the character's animation), multiple human collaborators can be selected. The human brings authenticity. The AI brings scale.</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--border);align-items:start;">
+          <div style="font-family:var(--font-d);font-size:32px;color:var(--gold-dim);line-height:1;text-align:center;">5</div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--gold-lt);letter-spacing:0.06em;margin-bottom:6px;">AI PRODUCTION</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.7;">TrueVoice enters full production mode. The format is always 5 chapters + 5 songs — each chapter ends as a song, each song deepens the story world. Music produced with AI tools (Suno, Udio). Animation produced with AI video pipelines (Kling, Runway). Human reference footage is used for lip sync and movement authenticity. The result is a complete entertainment universe at a fraction of traditional production cost.</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;padding:20px 0;align-items:start;">
+          <div style="font-family:var(--font-d);font-size:32px;color:var(--gold-dim);line-height:1;text-align:center;">6</div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--gold-lt);letter-spacing:0.06em;margin-bottom:6px;">THE LAUNCH</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.7;">The artist enters the world. First single released as a gift — no token pitch, no NFT mention. Just the music and the story. The TFANS collection mint follows once organic traction is demonstrated. The community that helped build the artist now owns a piece of it.</div>
+          </div>
+        </div>
+
+      </div>
+      <div style="margin-top:20px;padding:16px 20px;background:rgba(200,150,12,0.05);border-radius:8px;font-size:13px;color:var(--muted);">
+        <strong style="color:var(--gold-lt);">The principle:</strong> We involve the community at least twice in every artist's creation — and we find more ways to include them with each new launch. A community that helped build the artist cares about its success in a way no marketing campaign can manufacture.
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 04 RUFFUS -->
+  <section id="s4">
+    <div class="s-label">04</div>
+    <h2 class="s-title">First Artist<br><span>Ruffus</span></h2>
+    <p class="s-body">
+      In a world where perreo gave dogs human abilities, <strong>Ruffus was the first</strong>. A villain wants to destroy that world — and the only way is by destroying Ruffus. But when the beat takes over, nobody can stop him. Reggaetón-pop. AI native. Built before the tools existed.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Minutes of Chapter 1 Complete</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Original Tracks Recorded</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2023</div>
+        <div class="stat-label">Built Frame by Frame</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Why this matters:</strong> Chapter 1 was built in 2023 with Blender, Midjourney, Mixamo, and manual frame-by-frame animation — before AI video tools existed. This is not a project that appeared when AI became easy. This is a project born from conviction when it was hard. The Genesis RUFANS collection is the founding membership of that original vision.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 05 GO-TO-MARKET -->
+  <section id="s13">
+    <div class="s-label">05</div>
+    <h2 class="s-title">Go-to-Market<br><span>Strategy</span></h2>
+    <p class="s-body">
+      TrueVoice does not launch as a crypto project. It launches as an <strong>entertainment project with a community ownership layer</strong>. The music and the story come first. The token opportunity comes after — for those who want to be part of what comes next.
+    </p>
+
+    <div class="callout">
+      <strong>The founding principle:</strong> We never ask anyone to bet blind. Each phase validates the previous one. Each success funds the next. If something doesn't work, we learn cheaply. If it works, we scale with confidence.
+    </div>
+
+    <!-- 3-phase funnel -->
+    <div class="flow-diagram">
+      <div class="flow-title">The Three-Phase Launch Funnel</div>
+      <div style="display:flex;flex-direction:column;gap:0;margin-top:8px;">
+
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:start;padding:24px 0;border-bottom:1px solid var(--border);">
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-d);font-size:40px;color:var(--gold-dim);line-height:1;">01</div>
+            <div style="font-size:10px;letter-spacing:0.15em;color:var(--muted);margin-top:4px;">MUSIC FIRST</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:22px;color:var(--white);letter-spacing:0.05em;margin-bottom:8px;">The Gift — Summer Song</div>
+            <div style="font-size:14px;color:var(--muted);line-height:1.7;">
+              Ruffus's first single launches with minimal budget as a <strong style="color:var(--white);">free gift to the world</strong> — no NFT pitch, no token mention. Just the music, the character, and Chapter 1 of the animated series. Distributed on Spotify, YouTube, TikTok. Targeted paid campaign to reggaetón-pop fans aged 16–25 in Spain and Latin America.<br><br>
+              <strong style="color:var(--gold-lt);">Purpose:</strong> Validate the artist before committing investor capital. If the song generates organic traction, it's proof the model works. If it doesn't, we learn cheaply and adjust before the mint.
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:start;padding:24px 0;border-bottom:1px solid var(--border);">
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-d);font-size:40px;color:var(--gold);line-height:1;">02</div>
+            <div style="font-size:10px;letter-spacing:0.15em;color:var(--muted);margin-top:4px;">STORY REVEAL</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:22px;color:var(--white);letter-spacing:0.05em;margin-bottom:8px;">The Origin — Behind the Character</div>
+            <div style="font-size:14px;color:var(--muted);line-height:1.7;">
+              4–6 weeks after the song launch: reveal the making-of. Not the tech — the human story. How one person built this frame by frame in 2023 before the tools existed. The contrast between the old workflow (Blender, Midjourney, Mixamo, manual animation) and the new AI workflow is content in itself — and the kind of authentic storytelling that attracts press, crypto-native audiences, and potential investors.<br><br>
+              <strong style="color:var(--gold-lt);">Purpose:</strong> Convert music fans into project fans. Attract the Web3 audience that will become RUFANS holders.
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:start;padding:24px 0;">
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-d);font-size:40px;color:var(--gold-lt);line-height:1;">03</div>
+            <div style="font-size:10px;letter-spacing:0.15em;color:var(--muted);margin-top:4px;">OWNERSHIP</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-d);font-size:22px;color:var(--white);letter-spacing:0.05em;margin-bottom:8px;">The Opportunity — Be Part of It</div>
+            <div style="font-size:14px;color:var(--muted);line-height:1.7;">
+              Only when organic traction is demonstrated: present the ownership opportunity. Whitelist opens for RUFANS Genesis. Early investors enter with small capital but with <strong style="color:var(--white);">real creative power</strong> over the artist's development. The mint funds the Song 2 campaign with full AI animation and real marketing budget.<br><br>
+              <strong style="color:var(--gold-lt);">Purpose:</strong> Close the loop — fans who discovered the music can now own a piece of it.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Community participation in artist development -->
+    <h3 style="font-family:var(--font-d);font-size:28px;letter-spacing:0.06em;color:var(--white);margin:48px 0 8px;">Community-Driven Artist Development</h3>
+    <p style="font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:24px;max-width:680px;">
+      TrueVoice introduces a model that has never existed before in the music industry: <strong style="color:var(--white);">early investors co-create the artist</strong> alongside the production team. This is not consultation — it's real creative participation with real consequences for the final product.
+    </p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">How Community Shapes Each Artist</div>
+      <div class="chart-sub">Investors, whitelist holders and public audience all participate at different stages</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px;">
+        <div style="background:rgba(200,150,12,0.06);border:1px solid var(--gold-dim);border-radius:12px;padding:22px 20px;">
+          <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.15em;color:var(--gold);margin-bottom:12px;">SEED INVESTORS</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted);">
+            <li>◆ &nbsp;Vote on artist's signature skill (dancer style, vocal technique, visual aesthetic)</li>
+            <li>◆ &nbsp;Evaluate real dancer candidates who will inspire the character's movement</li>
+            <li>◆ &nbsp;Influence first song selection from shortlist</li>
+          </ul>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 20px;">
+          <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.15em;color:var(--white);margin-bottom:12px;">WHITELIST HOLDERS</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted);">
+            <li>◆ &nbsp;Public online polls on character details</li>
+            <li>◆ &nbsp;Participate in naming secondary characters</li>
+            <li>◆ &nbsp;Vote on next chapter story direction</li>
+          </ul>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 20px;">
+          <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.15em;color:var(--white);margin-bottom:12px;">PUBLIC AUDIENCE</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted);">
+            <li>◆ &nbsp;Social media polls visible to all</li>
+            <li>◆ &nbsp;Results influence but don't decide</li>
+            <li>◆ &nbsp;Creates viral engagement loops around each vote</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- The two-song safety net -->
+    <div class="callout">
+      <strong>The two-song safety net for investors:</strong> Song 1 launches with minimal budget — a proof of concept and a gift. If it generates traction, Song 2 launches with the capital from the RUFANS mint and a real campaign. If Song 1 doesn't perform, Song 2 is the opportunity to course-correct with proper resources. Early investors aren't betting on a single outcome — they're funding a system designed to iterate toward success. The artist that breaks through becomes an infinite revenue engine. The ones that don't teach us what the next one needs.
+    </div>
+
+    <!-- Expansion beyond crypto -->
+    <h3 style="font-family:var(--font-d);font-size:28px;letter-spacing:0.06em;color:var(--white);margin:48px 0 8px;">Beyond Crypto — The Real Destination</h3>
+    <p style="font-size:14px;color:var(--muted);line-height:1.75;max-width:680px;margin-bottom:16px;">
+      Crypto is the infrastructure. Entertainment is the product. But the true destination is something larger than both.
+    </p>
+    <p style="font-size:14px;color:var(--muted);line-height:1.75;max-width:680px;margin-bottom:16px;">
+      TrueVoice's long-term vision is to become <strong style="color:var(--white);">the entertainment platform that fuses music and stories into a single universe</strong> — generating its own revenues the way Netflix generates from content and Spotify generates from streaming, but with a fundamental difference: the community owns a piece of every artist from the beginning.
+    </p>
+    <p style="font-size:14px;color:var(--muted);line-height:1.75;max-width:680px;">
+      The TrueVoice app — in development for Phase 4 — will be the hub where fans discover artists, watch their animated series, listen to their music, manage their NFT memberships, stake their tokens, and access exclusive experiences. This is not a crypto app with music attached. This is an entertainment platform with a community ownership layer built in from the foundation. The blockchain is invisible to the end user. The story is everything.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TOKEN ARCHITECTURE renumbered -->
+  
+  <section id="s13">
+    <div class="s-label">05</div>
+    <h2 class="s-title">Token<br><span>Architecture</span></h2>
+    <p class="s-body">
+      TrueVoice operates with two complementary ownership layers. <strong>TVOICE</strong> is the label-wide governance token. <strong>TFANS</strong> are artist-specific fan membership NFTs. Together they create a complete ownership ecosystem — from the label to the individual artist.
+    </p>
+
+    <div class="flow-diagram">
+      <div class="flow-title">Two-Layer Ownership Model</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px;">
+        <div style="background:rgba(200,150,12,0.06);border:1px solid var(--gold-dim);border-radius:12px;padding:28px 24px;">
+          <div style="font-family:var(--font-d);font-size:32px;color:var(--gold-lt);letter-spacing:0.06em;margin-bottom:4px;">TVOICE</div>
+          <div style="font-size:11px;letter-spacing:0.2em;color:var(--muted);margin-bottom:16px;font-family:var(--font-d);">LABEL GOVERNANCE TOKEN</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted);">
+            <li>◆ &nbsp;Royalties from ALL artists</li>
+            <li>◆ &nbsp;Vote on new artist aesthetics</li>
+            <li>◆ &nbsp;Priority on all TFANS drops</li>
+            <li>◆ &nbsp;Tiered access (Bronze/Gold/Platinum)</li>
+            <li>◆ &nbsp;Festival revenue participation</li>
+          </ul>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px 24px;">
+          <div style="font-family:var(--font-d);font-size:32px;color:var(--white);letter-spacing:0.06em;margin-bottom:4px;">TFANS</div>
+          <div style="font-size:11px;letter-spacing:0.2em;color:var(--muted);margin-bottom:16px;font-family:var(--font-d);">ARTIST FAN MEMBERSHIP NFTs</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted);">
+            <li>◆ &nbsp;Royalties from their specific artist</li>
+            <li>◆ &nbsp;VIP access to artist events</li>
+            <li>◆ &nbsp;Rentable when not attending</li>
+            <li>◆ &nbsp;AR/Mixed reality event experiences</li>
+            <li>◆ &nbsp;Merchandise discounts</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:20px;padding:16px 24px;background:rgba(255,255,255,0.02);border-radius:8px;font-size:13px;color:var(--muted);text-align:center;">
+        First TFANS Campaign: <strong style="color:var(--gold-lt);">RUFANS</strong> · 333 Genesis NFTs · Ruffus Universe · Q4 2026
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 06 TVOICE TOKENOMICS -->
+  <section id="s13">
+    <div class="s-label">06</div>
+    <h2 class="s-title">TVOICE<br><span>Tokenomics</span></h2>
+    <p class="s-body">
+      500,000,000 TVOICE. Fixed supply. Never more. Designed for long-term solidity with a minimum 24-month operational runway built into the treasury — regardless of revenue generation.
+    </p>
+
+    <!-- Donut chart -->
+    <div class="chart-wrap">
+      <div class="chart-title">Supply Distribution</div>
+      <div class="chart-sub">500,000,000 TVOICE total · Fixed forever</div>
+      <div class="donut-container">
+        <svg class="donut-svg" width="240" height="240" viewBox="0 0 240 240" id="donutChart">
+          <!-- Built via JS below -->
+        </svg>
+        <div class="donut-legend" id="donutLegend"></div>
+      </div>
+    </div>
+
+    <!-- Vesting -->
+    <div class="chart-wrap">
+      <div class="chart-title">Vesting Schedule</div>
+      <div class="chart-sub">Cliff periods protect against early sell pressure</div>
+      <div class="vesting-grid" id="vestingGrid"></div>
+    </div>
+
+    <!-- Tier system -->
+    <h3 style="font-family:var(--font-d);font-size:28px;letter-spacing:0.06em;color:var(--white);margin:48px 0 8px;">Holder Tier System</h3>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:24px;">Benefits scale with the amount of TVOICE held in active staking.</p>
+    <div class="tier-grid">
+      <div class="tier-card">
+        <div class="tier-name" style="color:#cd7f32;">🥉 BRONZE</div>
+        <div class="tier-req">1,000 – 9,999 TVOICE staked · 1x multiplier</div>
+        <ul class="tier-perks">
+          <li>Base royalty share from all TrueVoice artists</li>
+          <li>10% discount on all TFANS drops</li>
+          <li>Priority whitelist on all launches</li>
+          <li>Private Discord channel access</li>
+          <li>Early content access before public release</li>
+        </ul>
+      </div>
+      <div class="tier-card" style="border-color:var(--gold-dim);">
+        <div class="tier-name" style="color:var(--gold-lt);">🥇 GOLD</div>
+        <div class="tier-req">10,000 – 49,999 TVOICE staked · 1.25x multiplier</div>
+        <ul class="tier-perks">
+          <li>All Bronze benefits</li>
+          <li>1.25x royalty multiplier vs base distribution</li>
+          <li>15% discount on all TFANS drops</li>
+          <li>Voting rights on new artist aesthetic selection</li>
+          <li>Festival revenue participation pool</li>
+          <li>Candidate evaluation in "The Human" selection</li>
+        </ul>
+      </div>
+      <div class="tier-card" style="border-color:#e5e4e2;">
+        <div class="tier-name" style="color:#e5e4e2;">💎 PLATINUM</div>
+        <div class="tier-req">50,000+ TVOICE staked · 1.5x multiplier</div>
+        <ul class="tier-perks">
+          <li>All Gold benefits</li>
+          <li>1.5x royalty multiplier vs base distribution</li>
+          <li>20% discount on all TFANS drops</li>
+          <li>Propose new artist concepts for TrueVoice evaluation</li>
+          <li>Behind-the-scenes label updates before anyone</li>
+          <li>VIP at all TrueVoice live events and festivals</li>
+          <li>Dedicated Platinum Discord channel</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>How multipliers work:</strong> The total royalty pool (10% of consolidated net revenue from all artists) is distributed proportionally to staked tokens, weighted by tier multiplier. More tokens staked + higher tier = larger share of the pool. The total distributed never exceeds the pool — multipliers determine your share relative to other stakers, not an absolute percentage. During the first 12 months post-TGE, an additional monthly reward from the Community allocation (25% of supply) is distributed to all active stakers, ensuring early holders receive meaningful value while label revenue grows.
+    </div>
+    <div class="callout warn" style="margin-top:24px;">
+      <strong>Governance model:</strong> TVOICE voting is consultative. The TrueVoice CEO retains final decision authority on all label operations. Projects that transfer full DAO control before product-market fit historically struggle with paralysis and poor decisions. As the label matures and proves its model, governance scope expands progressively — giving the community more power as the stakes become clearer.
+    </div>
+
+  </section>
+  <section id="s13">
+    <div class="s-label">07</div>
+    <h2 class="s-title">TFANS &<br><span>RUFANS</span></h2>
+    <p class="s-body">
+      TFANS are TrueVoice's artist fan membership NFTs — one collection per artist. The first TFANS campaign is <strong>RUFANS</strong>: 333 Genesis editions exclusively for the Ruffus universe. Your permanent on-chain pass to his music, his story, and everything he builds next.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">333</div>
+        <div class="stat-label">Genesis Supply — Never More</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">TBA</div>
+        <div class="stat-label">Mint Price · Set at Launch</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5%</div>
+        <div class="stat-label">Royalty on Secondary Sales</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">RUFANS Holder Benefits</div>
+      <div class="chart-sub">Staking activates royalty distribution in USDC/SOL</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:rgba(200,150,12,0.06);border:1px solid var(--gold-dim);border-radius:10px;padding:16px 18px;">
+            <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.1em;color:var(--gold);margin-bottom:4px;">ROYALTIES</div>
+            <div style="font-size:13px;color:var(--muted);">Share of Ruffus streaming, video, and sync revenue distributed via staking</div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+            <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.1em;color:var(--white);margin-bottom:4px;">VIP EVENTS</div>
+            <div style="font-size:13px;color:var(--muted);">Priority access + discounts to Ruffus concerts. Smaller discounts for other TrueVoice artists.</div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+            <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.1em;color:var(--white);margin-bottom:4px;">NFT RENTAL</div>
+            <div style="font-size:13px;color:var(--muted);">Can't attend an event? Rent your RUFAN to another fan and earn without selling your membership.</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+            <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.1em;color:var(--white);margin-bottom:4px;">AR EXPERIENCES</div>
+            <div style="font-size:13px;color:var(--muted);">Mixed reality event layer — AR games, rewards and collectibles mapped to physical event venues.</div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+            <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.1em;color:var(--white);margin-bottom:4px;">EXCLUSIVE CONTENT</div>
+            <div style="font-size:13px;color:var(--muted);">Early access to episodes, unreleased music, and behind-the-scenes production content.</div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+            <div style="font-family:var(--font-d);font-size:13px;letter-spacing:0.1em;color:var(--white);margin-bottom:4px;">MERCHANDISE</div>
+            <div style="font-size:13px;color:var(--muted);">Holder discounts on official Ruffus merchandise and future festival merchandise.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:14px;color:var(--muted);margin-top:16px;font-style:italic;">
+      Technical note: All economic transactions (royalty distribution, event payments, NFT rental) are conducted in USDC or SOL. A TFAN fungible token may be introduced in Phase 2 as an internal platform credit system, subject to MiCA legal review.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 08 ROYALTY FLOW -->
+  <section id="s13">
+    <div class="s-label">08</div>
+    <h2 class="s-title">Royalty<br><span>Flow</span></h2>
+    <p class="s-body">
+      Revenue flows from streaming, video, sync licensing, live events, and merchandise. 10% of net revenue from streaming and video goes to TVOICE stakers. TFANS holders receive an additional share from their specific artist's revenue.
+    </p>
+
+    <div class="flow-diagram">
+      <div class="flow-title">Revenue Distribution Model</div>
+      <div class="royalty-flow">
+        <div class="rf-node">
+          <div class="rf-icon">🎵</div>
+          <div class="rf-label">REVENUE</div>
+          <div class="rf-sub">Streaming · Video · Events</div>
+        </div>
+        <div class="rf-arrow">→</div>
+        <div class="rf-node gold">
+          <div class="rf-icon">🏛️</div>
+          <div class="rf-label">TRUEVOICE</div>
+          <div class="rf-sub">Label treasury</div>
+        </div>
+        <div class="rf-arrow">→</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="rf-node" style="border-color:var(--gold-dim);min-width:160px;">
+            <div class="rf-label" style="font-size:13px;">TVOICE POOL</div>
+            <div class="rf-sub">10% net · all artists · stakers only</div>
+          </div>
+          <div class="rf-node" style="min-width:160px;">
+            <div class="rf-label" style="font-size:13px;">TFANS POOL</div>
+            <div class="rf-sub">5% net · per artist · holders only</div>
+          </div>
+          <div class="rf-node" style="min-width:160px;">
+            <div class="rf-label" style="font-size:13px;">OPERATIONS</div>
+            <div class="rf-sub">85% · production · team · growth</div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:24px;text-align:center;">
+        Distributions occur quarterly in USDC/SOL · Requires active staking during the distribution period · Smart contract governed
+      </p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 10 USE OF FUNDS -->
+  <section id="s10">
+    <div class="s-label">10</div>
+    <h2 class="s-title">Use of<br><span>Funds</span></h2>
+    <p class="s-body">Capital raised is allocated across four pillars designed for a minimum <strong>24-month runway</strong> without requiring revenue generation.</p>
+    <div class="chart-wrap">
+      <div class="chart-title">Fund Allocation</div>
+      <div class="chart-sub">Across seed round + RUFANS mint + TVOICE TGE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;">
+        <div style="background:rgba(200,150,12,0.06);border:1px solid var(--gold-dim);border-radius:12px;padding:24px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--gold-lt);">Team & Operations</div>
+            <div style="font-family:var(--font-d);font-size:24px;color:var(--gold);">40%</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Founder, first partnerships hire, accounting, legal maintenance. 24 months core operations.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--white);">Content Production</div>
+            <div style="font-family:var(--font-d);font-size:24px;color:var(--gold);">25%</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Music mastering, animation, AI tools, Song 2 full campaign, second artist development.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--white);">Partnerships & Growth</div>
+            <div style="font-family:var(--font-d);font-size:24px;color:var(--gold);">20%</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">Platform deals, NFT community alliances, event capital, token incentives for strategic partners.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div style="font-family:var(--font-d);font-size:18px;color:var(--white);">Legal Reserve</div>
+            <div style="font-family:var(--font-d);font-size:24px;color:var(--gold);">15%</div>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;">MiCA compliance, IP protection, music rights defense against industry challenges to AI-generated content.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 11 ROADMAP -->
+  <section id="s13">
+    <div class="s-label">11</div>
+    <h2 class="s-title">Road<span>map</span></h2>
+    <p class="s-body">What you see today — the animated series, the music, the 3D web experience, the podcast, the whitelist system — was built by one person with conviction before the tools made it easy. TrueVoice is now at the moment where that foundation becomes a launchpad. The roadmap reflects a project built to scale, not to rush.</p>
+    <div class="timeline">
+      <div class="tl-item active">
+        <div class="tl-phase">PHASE 0 · Q1–Q2 2026 · NOW</div>
+        <div class="tl-title">Foundation</div>
+        <div class="tl-body">TrueVoice OÜ registration (Estonia, pending e-Residency card). Web live at truevoicelab.com. Podcast "The Experiment" launched. All social networks active. Seed investor conversations begin.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">PHASE 1 · Q2–Q3 2026</div>
+        <div class="tl-title">The Gift — Ruffus Song 1</div>
+        <div class="tl-body">First Ruffus single released free to the world. Chapter 1 animated series premiere. Minimal marketing budget — organic validation test. Making-of content campaign. Whitelist opens. Investor co-creation begins: votes on artist skills, dancer candidates, song selection.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">PHASE 2 · Q4 2026 – Q1 2027</div>
+        <div class="tl-title">RUFANS Genesis Mint</div>
+        <div class="tl-body">333 RUFANS minted on Solana. Magic Eden + Crossmint (credit card). Whitelist co-creators get priority. Song 2 enters production with full AI animation and real marketing budget funded by mint proceeds.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">PHASE 3 · Q2 2027</div>
+        <div class="tl-title">TVOICE Launch & Staking</div>
+        <div class="tl-body">TVOICE governance token public launch after RUFANS demonstrates demand. Staking live. First royalty distribution. DAO voting for second artist aesthetic. Full legal and accounting infrastructure operational.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">PHASE 4 · Q3–Q4 2027</div>
+        <div class="tl-title">Full Release & Second Artist</div>
+        <div class="tl-body">Full Ruffus album. Five-episode series. First live event with AR layer. Second TFANS collection with full community co-creation process. Latin American expansion. Non-crypto platform partnerships.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">PHASE 5 · 2028+</div>
+        <div class="tl-title">Platform & Scale</div>
+        <div class="tl-body">TrueVoice app as content and staking hub. Hybrid festival with full AR layer. TrueVoice becomes the global franchise model for community-owned AI artist labels.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 10 RISKS -->
+  <section id="s14">
+    <div class="s-label">10</div>
+    <h2 class="s-title">Risk<br><span>Factors</span></h2>
+    <p class="s-body">Every project operates in a context of uncertainty. What separates serious projects from speculative ones is not the absence of risk — it's the quality of thinking applied to navigating it.</p>
+
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>Risk Factor</th>
+          <th>Context</th>
+          <th>Our Response</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Regulatory Evolution (MiCA)</td>
+          <td>EU crypto regulation continues to evolve. MiCA may impose requirements that limit certain token activities in specific jurisdictions.</td>
+          <td>TrueVoice OÜ is structured for EU compliance from day one. MiCA-specialist legal counsel is engaged before the TGE. If regulatory constraints in any jurisdiction limit growth, TrueVoice will evaluate relocating operations to a more favorable framework — the project is built to be portable.</td>
+        </tr>
+        <tr>
+          <td>NFT Market Sentiment</td>
+          <td>NFT demand cycles are unpredictable. Speculative NFT markets have contracted significantly since 2021–2022.</td>
+          <td>RUFANS are not speculative assets — they are fan memberships with real economic utility: royalty participation, event access, rental income, and exclusive content. The marketing strategy leads with the artist and the music, not the NFT. If "NFT" as a term creates friction, the product is reframed as a membership — the blockchain is infrastructure, not the pitch.</td>
+        </tr>
+        <tr>
+          <td>Founder-Led Early Stage</td>
+          <td>Early-stage projects concentrated in a single founder carry execution dependency.</td>
+          <td>This concentration is intentional and temporary. The founder has already demonstrated the ability to build the entire product stack alone — which is the strongest possible proof of conviction and capability. Capital raised is specifically allocated to scale the team and reduce this dependency. Vesting structures ensure long-term alignment throughout.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 11 LEGAL -->
+  <section id="s13">
+    <div class="s-label">11</div>
+    <h2 class="s-title">Legal &<br><span>Compliance</span></h2>
+
+    <div class="legal-box">
+      <h4>COMPANY STRUCTURE</h4>
+      TrueVoice OÜ is a private limited company registered in Estonia, European Union. Estonia's digital business infrastructure and progressive crypto-friendly regulatory environment — including full MiCA compliance framework — makes it the optimal jurisdiction for a Web3 entertainment company operating across EU markets.
+    </div>
+
+    <div class="legal-box">
+      <h4>TOKEN CLASSIFICATION</h4>
+      TVOICE is designed as a utility and governance token, not a security. RUFANS NFTs are designed as fan membership assets with utility benefits, not investment contracts. TrueVoice will engage qualified MiCA-specialist legal counsel before the public Token Generation Event to ensure full regulatory compliance across all EU jurisdictions.
+    </div>
+
+    <div class="legal-box">
+      <h4>DISCLAIMER</h4>
+      This whitepaper is for informational purposes only and does not constitute financial advice, investment advice, or an offer to sell securities. Participation in any TrueVoice token sale involves significant risk including total loss of capital. Always conduct your own research. Past performance of any referenced projects does not indicate future results. This document may contain forward-looking statements that are subject to change.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 12 TEAM -->
+  <section id="s14">
+    <div class="s-label">12</div>
+    <h2 class="s-title">The<br><span>Founder</span></h2>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px;display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap;">
+      <div style="flex:1;min-width:240px;">
+        <div style="font-family:var(--font-d);font-size:32px;color:var(--gold-lt);letter-spacing:0.06em;margin-bottom:4px;">JOEMAYK</div>
+        <div style="font-family:var(--font-d);font-size:12px;letter-spacing:0.2em;color:var(--muted);margin-bottom:20px;">FOUNDER · CREATIVE DIRECTOR · LISBON</div>
+        <p style="font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:16px;">
+          Pop-rock artist and entrepreneur. Founded TrueVoice after building Ruffus Chapter 1 entirely by hand in 2023 — Midjourney, Blender, Mixamo, frame-by-frame animation — before AI video tools existed.
+        </p>
+        <p style="font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:16px;">
+          Prior to TrueVoice, founded and operated <strong style="color:var(--white);">Fourblocks Technology SL</strong> for over a decade — a mobile devices and electronics company. That experience taught a fundamental lesson: in Spain's fiscal and regulatory environment, exponential growth for small digital entrepreneurs is structurally constrained. Not a complaint — a data point that led to a decision.
+        </p>
+        <p style="font-size:14px;color:var(--muted);line-height:1.75;">
+          TrueVoice was designed from day one to operate at global scale. That's why it's built on Estonia's digital business framework — the most progressive environment in Europe for digital and Web3 companies. And if Europe itself ever creates friction, TrueVoice is structured to move. The project follows opportunity, not geography.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="wp-footer">
+  <div>
+    <div class="wp-footer-logo">TRUE<span>VOICE</span></div>
+    <div style="font-size:13px;color:var(--muted);margin-top:8px;">truevoicelab.com</div>
+  </div>
+  <div class="wp-footer-meta">
+    <div>Whitepaper v2.0 · April 2026</div>
+    <div>TrueVoice OÜ · Estonia, EU</div>
+    <div style="color:var(--gold-dim);">@TrueVoiceNFT · Discord · truevoicelab.com</div>
+  </div>
+</div>
+
+<script>
+// ── DONUT CHART ──────────────────────────────────────
+const segments = [
+  { label: 'Treasury DAO',         pct: 30, tokens: '150M', color: '#C8960C' },
+  { label: 'Community & Ecosystem', pct: 25, tokens: '125M', color: '#F4C542' },
+  { label: 'Founding Team',        pct: 18, tokens: '90M',  color: '#7A5A00' },
+  { label: 'Investors',            pct: 12, tokens: '60M',  color: '#A0760A' },
+  { label: 'Public Sale (TGE)',    pct: 10, tokens: '50M',  color: '#E8B020' },
+  { label: 'Marketing & Partners', pct:  5, tokens: '25M',  color: '#5A4000' },
+];
+
+const svg = document.getElementById('donutChart');
+const legend = document.getElementById('donutLegend');
+const cx = 120, cy = 120, r = 90, ir = 54;
+let startAngle = -Math.PI / 2;
+
+segments.forEach(seg => {
+  const angle = (seg.pct / 100) * Math.PI * 2;
+  const endAngle = startAngle + angle;
+  const x1 = cx + r * Math.cos(startAngle);
+  const y1 = cy + r * Math.sin(startAngle);
+  const x2 = cx + r * Math.cos(endAngle);
+  const y2 = cy + r * Math.sin(endAngle);
+  const ix1 = cx + ir * Math.cos(startAngle);
+  const iy1 = cy + ir * Math.sin(startAngle);
+  const ix2 = cx + ir * Math.cos(endAngle);
+  const iy2 = cy + ir * Math.sin(endAngle);
+  const large = angle > Math.PI ? 1 : 0;
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} L ${ix2} ${iy2} A ${ir} ${ir} 0 ${large} 0 ${ix1} ${iy1} Z`);
+  path.setAttribute('fill', seg.color);
+  path.setAttribute('stroke', '#000');
+  path.setAttribute('stroke-width', '2');
+  path.style.transition = 'opacity 0.2s';
+  path.addEventListener('mouseenter', () => path.style.opacity = '0.8');
+  path.addEventListener('mouseleave', () => path.style.opacity = '1');
+  svg.appendChild(path);
+
+  // Center label
+  const midAngle = startAngle + angle / 2;
+  const lx = cx + (r * 0.65) * Math.cos(midAngle);
+  const ly = cy + (r * 0.65) * Math.sin(midAngle);
+  if (seg.pct >= 10) {
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', lx);
+    text.setAttribute('y', ly + 4);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('font-family', 'DM Mono, monospace');
+    text.setAttribute('font-size', '11');
+    text.setAttribute('fill', '#000');
+    text.setAttribute('font-weight', '500');
+    text.textContent = seg.pct + '%';
+    svg.appendChild(text);
+  }
+
+  // Center total
+  const totalText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  totalText.setAttribute('x', cx);
+  totalText.setAttribute('y', cy - 6);
+  totalText.setAttribute('text-anchor', 'middle');
+  totalText.setAttribute('font-family', 'Bebas Neue, sans-serif');
+  totalText.setAttribute('font-size', '18');
+  totalText.setAttribute('fill', '#F4C542');
+  totalText.textContent = '500M';
+  svg.appendChild(totalText);
+
+  const totalSub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  totalSub.setAttribute('x', cx);
+  totalSub.setAttribute('y', cy + 12);
+  totalSub.setAttribute('text-anchor', 'middle');
+  totalSub.setAttribute('font-family', 'DM Mono, monospace');
+  totalSub.setAttribute('font-size', '9');
+  totalSub.setAttribute('fill', '#888899');
+  totalSub.textContent = 'TVOICE';
+  svg.appendChild(totalSub);
+
+  startAngle = endAngle;
+
+  // Legend
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  item.innerHTML = `
+    <div class="legend-dot" style="background:${seg.color}"></div>
+    <span class="legend-name">${seg.label}</span>
+    <span class="legend-tokens">${seg.tokens}</span>
+    <span class="legend-pct">${seg.pct}%</span>
+  `;
+  legend.appendChild(item);
+});
+
+// ── VESTING BARS ─────────────────────────────────────
+const vestingData = [
+  { label: 'Treasury DAO',          years: 'Controlled by multisig', pct: 30, color: '#C8960C', cliff: 0 },
+  { label: 'Community & Ecosystem', years: '4yr progressive release', pct: 25, color: '#F4C542', cliff: 0 },
+  { label: 'Founding Team',         years: '4yr vesting, 1yr cliff',  pct: 18, color: '#7A5A00', cliff: 25 },
+  { label: 'Investors',             years: '2yr vesting, 6mo cliff',  pct: 12, color: '#A0760A', cliff: 25 },
+  { label: 'Public Sale (TGE)',     years: 'Liquid at launch',        pct: 10, color: '#E8B020', cliff: 0 },
+  { label: 'Marketing & Partners', years: '1yr progressive',          pct:  5, color: '#5A4000', cliff: 0 },
+];
+
+const grid = document.getElementById('vestingGrid');
+vestingData.forEach(v => {
+  const row = document.createElement('div');
+  row.className = 'vesting-row';
+  const cliffHtml = v.cliff ? `<div class="vesting-cliff" style="left:${v.cliff}%"></div>` : '';
+  row.innerHTML = `
+    <div>
+      <div class="vesting-label">${v.label}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px;">${v.years}</div>
+    </div>
+    <div class="vesting-bar-wrap">
+      <div class="vesting-bar" style="width:${v.pct * 3.33}%;background:${v.color};">${cliffHtml}</div>
+    </div>
+    <div class="vesting-pct">${v.pct}%</div>
+  `;
+  grid.appendChild(row);
+});
+</script>
+</body>
+</html>
